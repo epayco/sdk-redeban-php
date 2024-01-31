@@ -2,7 +2,7 @@
 
 ## Instalación
 
-Para instalar la librería, sigue estos pasos:
+Para instalar el sdk, sigue estos pasos:
 
 1. Agrega el repositorio a tu `composer.json`:
 
@@ -26,7 +26,7 @@ Para instalar la librería, sigue estos pasos:
     }
     ```
 
-2. Ejecuta el siguiente comando para instalar la librería:
+2. Ejecuta el siguiente comando para instalar:
 
     ```bash
     composer install
