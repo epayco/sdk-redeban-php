@@ -6,6 +6,9 @@ use Epayco\SdkRedeban\dto\ProcessTransactionRedebanVentaPresente;
 use Epayco\SdkRedeban\validations\ProcessTransactionValidation;
 use Epayco\SdkRedeban\services\CompraService;
 use Epayco\SdkRedeban\helpers\HelperResponse;
+use Epayco\SdkRedeban\dto\ShopDto;
+use Epayco\SdkRedeban\services\ShopService;
+use Epayco\SdkRedeban\validations\ShopValidation;
 
 class EpaycoSdkRedeban extends HelperResponse
 {
@@ -19,13 +22,13 @@ class EpaycoSdkRedeban extends HelperResponse
         return "¡Hola, mundo!";
     }
 
-    public function processTransaction(ProcessTransactionRedebanVentaPresente $process, CompraService $compraService)
-    { //comprar
-        $data = ProcessTransactionValidation::validate($process);
-        if ($data["success"]) {
-            return $this->responseJson($compraService($process), $compraService->outData);
+    public function shopTransaction(ShopDto $request, $shopValidation = new ShopValidation, $shopService = new ShopService)
+    { 
+        if($shopValidation($request)) {
+            return $this->responseJson($shopService($shopValidation->response),$shopService->outData);
         }
-        return $this->responseJson(false, $data);
+        return $this->responseJsonError($shopValidation->response);
+
     }
 
     public function cancelTransaction()

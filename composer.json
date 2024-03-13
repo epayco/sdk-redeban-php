@@ -14,5 +14,7 @@
             "email": "ds000082@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "respect/validation": "^2.3"
+    }
 }

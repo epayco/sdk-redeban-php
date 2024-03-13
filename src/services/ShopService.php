@@ -4,7 +4,7 @@ namespace Epayco\SdkRedeban\services;
 use Epayco\SdkRedeban\services\Service;
 use Epayco\SdkRedeban\repositories\RedebanRepository;
 
-class CompraService extends Service
+class ShopService extends Service
 {
     public $outData = [];
     public function __invoke($data)
@@ -13,5 +13,6 @@ class CompraService extends Service
         $rest = $redebanRepository->shopRequest($data);
         $this->outData = $rest;
         return true;
+        
     }
 }

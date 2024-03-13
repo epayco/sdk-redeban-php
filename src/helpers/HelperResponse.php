@@ -6,9 +6,10 @@ class HelperResponse
 {
     public function responseJson(bool $type, $response=null)
     {
-        return $type ? $this->responseJsonSuccess($response) : $this->responseJsonError($response);
-    }
-    public function responseJsonSuccess($data = null, $message = "Success")
+        return $type ? $this->responseJsonOk($response) : $this->responseJsonError($response);
+    }    
+    
+    public function responseJsonOk($data = null, $message = "Success")
     {
         return json_encode([
             'success'  => true,
