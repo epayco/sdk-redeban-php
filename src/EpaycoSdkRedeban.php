@@ -4,11 +4,13 @@ namespace Epayco\SdkRedeban;
 
 use Epayco\SdkRedeban\dto\ProcessTransactionRedebanVentaPresente;
 use Epayco\SdkRedeban\validations\ProcessTransactionValidation;
-use Epayco\SdkRedeban\services\CompraService;
 use Epayco\SdkRedeban\helpers\HelperResponse;
 use Epayco\SdkRedeban\dto\ShopDto;
 use Epayco\SdkRedeban\services\ShopService;
 use Epayco\SdkRedeban\validations\ShopValidation;
+use Epayco\SdkRedeban\dto\VoidDto;
+use Epayco\SdkRedeban\services\VoidService;
+use Epayco\SdkRedeban\validations\VoidValidation;
 
 class EpaycoSdkRedeban extends HelperResponse
 {
@@ -31,9 +33,13 @@ class EpaycoSdkRedeban extends HelperResponse
 
     }
 
-    public function cancelTransaction()
+    public function voidTransaction(VoidDto $request, $voidValidation = new VoidValidation, $voidService = new VoidService)
     { //anular
+        if ($voidValidation($request)) {
 
+            return $this->responseJson($voidService($voidValidation), $voidService->outData);
+        }
+        return $this->responseJson(false, $voidValidation->response);
     }
 
     public function reverseTransaction()
