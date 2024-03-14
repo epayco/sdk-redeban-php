@@ -22,7 +22,7 @@ class EpaycoSdkRedeban extends HelperResponse
         return "¡Hola, mundo!";
     }
 
-    public function shopTransaction(ShopDto $request, $shopValidation = new ShopValidation, $shopService = new ShopService)
+    public function processTransaction(ShopDto $request, $shopValidation = new ShopValidation, $shopService = new ShopService)
     { 
         if($shopValidation($request)) {
             return $this->responseJson($shopService($shopValidation->response),$shopService->outData);
