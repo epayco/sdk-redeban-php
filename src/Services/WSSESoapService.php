@@ -4,7 +4,6 @@ namespace App\Services\Redeban;
 
 use DOMDocument;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use RobRichards\WsePhp\WSSESoap;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SoapClient;
@@ -68,13 +67,14 @@ class WSSESoapService extends SoapClient
 
     private function logSoapResponse($response, $request): void
     {
-        Log::info(
-            "api_rbm_soap_response",
-            [
-                "rHeaders" => $this->__getLastResponseHeaders(),
-                "rResponse" => $response, "request" => $request
-            ]
-        );
+        // Log::info(
+        //     "api_rbm_soap_response",
+        //     [
+        //         "rHeaders" => $this->__getLastResponseHeaders(),
+        //         "rResponse" => $response, "request" => $request
+        //     ]
+        // );
+        //TODO log
     }
 
     /**
@@ -102,17 +102,19 @@ class WSSESoapService extends SoapClient
 
     private function logDecryptedResponse($response): void
     {
-        Log::info("api_rbm_soap_response", [
-            "decrypt" => $response
-        ]);
+        // Log::info("api_rbm_soap_response", [
+        //     "decrypt" => $response
+        // ]);
+        //TODO log
     }
 
     private function logError(Exception $e): void
     {
-        Log::error('API Redeban error', [
-            "message" => $e->getMessage(),
-            "trace" => $e->getTraceAsString()
-        ]);
+        // Log::error('API Redeban error', [
+        //     "message" => $e->getMessage(),
+        //     "trace" => $e->getTraceAsString()
+        // ]);
+        //TODO log
     }
 
 }

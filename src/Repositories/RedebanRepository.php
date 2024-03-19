@@ -1,10 +1,8 @@
 <?php
 namespace Epayco\SdkRedeban\repositories;
 
-use DOMDocument;
-use DOMXPath;
-use App\Helpers\Encryption\EncryptionManager;
-use App\Helpers\Encryption\RSAEncryption;
+use Helpers\Encryption\EncryptionManager;
+use Helpers\Encryption\RSAEncryption;
 use Carbon\Carbon;
 use Gaarf\XmlToPhp\Convertor;
 
@@ -24,7 +22,7 @@ class RedebanRepository
         $rsaEncryption = new RSAEncryption();
         $encryptionManager = new EncryptionManager($rsaEncryption);
         $encryptedData = $encryptionManager->encryptData($data, []);
-        var_dump($encryptedData); die();
+        // var_dump($encryptedData); die();
         return $encryptedData;
 
     }
@@ -70,24 +68,6 @@ class RedebanRepository
                 </com:compraProcesarRespuesta>
             </soapenv:Body>
         </soapenv:Envelope>';
-    }
-    function xmlStringToArray($xmlString)
-    {
-        $dom = new DOMDocument;
-        $dom->loadXML($xmlString);
-
-        $xpath = new DOMXPath($dom);
-
-        // Registra los espacios de nombres
-        $namespaces = $xpath->query('//namespace::*');
-        foreach ($namespaces as $namespace) {
-            $dom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:' . $namespace->prefix, $namespace->nodeValue);
-        }
-
-        // Convierte el XML a array
-        $array = json_decode(json_encode(simplexml_import_dom($dom), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), true);
-
-        return $array;
     }
 
     public function reverseTest(): ?string
@@ -145,57 +125,14 @@ class RedebanRepository
          </soapenv:Envelope>';
     }
 
-    function generateRequestVoid($data)
+    function void($objRequest)
     {
-        $compraCancelacionProcesarSolicitud = [
-            "cabeceraSolicitud" => [
-                "infoPuntoInteraccion" => [
-                    "tipoTerminal" => 'MPOS',
-                    "idTerminal" => $data->terminalId,
-                    "idAdquiriente" => $data->acquirerId,
-                    "idTransaccionTerminal" => $data->terminalTransactionId,
-                    "modoCapturaPAN" => $data->panCaptureMode,
-                    "capacidadPIN" => $data->pinCapability,
-                ]
-            ],
-            "infoMedioPago" => [
-                "idTrack" => [
-                    "Franquicia" => $data->franchise,
-                    "track" => $data->track,
-                    "tipoCuenta" => $data->accountType,
-                ],
-                "infoEMV" => [
-                    "datosToken" => $data->tokenData,
-                    "datosDiscretos" => $data->discreteData,
-                    "estadoToken" => $data->tokenStatus,
-                ],
-            ],
-            "infoCompra" => [
-                "montoTotal" => $data->totalAmount,
-                "infoImpuestos" => [
-                    "tipoImpuesto" => "IVA",
-                    "monto" => $data->taxAmount,
-                    "baseImpuesto" => $data->amountBase,
-                ],
-                "montoDetallado" => [
-                    "tipoMontoDetallado" => 'BaseDevolucionIVA',
-                    "monto" => $data->VATRefundBase,
-                ],
-                "referencia" => $data->reference,
-                "cantidadCuotas" => $data->installmentCount,
-            ],
-            "infoRefCancelacion" => [
-                "numAprobacion" => 'approvalNumber',
-                "idTransaccionAutorizador" => $data->authorizerTransactionId
-            ],
-        ];
-        return (object) $compraCancelacionProcesarSolicitud;
-    }
-
-    function void($data)
-    {
-        $objRequest = $this->generateRequestVoid((object) $data);
         //TODO ejecución del request anular
+
+        // $rsaEncryption = new RSAEncryption();
+        // $encryptionManager = new EncryptionManager($rsaEncryption);
+        // $encryptedData = $encryptionManager->encryptData($objRequest, []);
+        
         $xmlString = $this->voidResponse();
         $data = Convertor::covertToArray($xmlString);
         return $data;

@@ -1,20 +1,32 @@
 {
-    "name": "epayco/sdk_redeban_php",
-    "type": "sdk",
-    "description": "Epayco SDK redeban for PHP",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Epayco\\SdkRedeban\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Epayco and contributors",
-            "email": "ds000082@gmail.com"
-        }
-    ],
-    "require": {
-        "respect/validation": "^2.3"
-    }
+	"name": "epayco/sdk_redeban_php",
+	"type": "sdk",
+	"description": "Epayco SDK redeban for PHP",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Epayco\\SdkRedeban\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Epayco and contributors",
+			"email": "ds000082@gmail.com"
+		}
+	],
+	"require": {
+		"php": "^8.2",
+		"ext-dom": "*",
+		"ext-soap": "*",
+		"firebase/php-jwt": "^6.10",
+		"gree/jose": "^2.2",
+		"lcobucci/jwt": "^5.2",
+		"lexik/jwt-authentication-bundle": "^2.20",
+		"robrichards/wse-php": "^2.0",
+		"robrichards/xmlseclibs": "^3.1",
+		"respect/validation": "^2.3",
+		"web-token/jwt-framework": "^3.3",
+		"nesbot/carbon": "^2.16",
+		"gaarf/xml-to-php-array": "^1.0"
+	}
 }

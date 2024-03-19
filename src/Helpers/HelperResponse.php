@@ -1,6 +1,6 @@
 <?php
 
-namespace Epayco\SdkRedeban\helpers;
+namespace Epayco\SdkRedeban\Helpers;
 
 class HelperResponse
 {
