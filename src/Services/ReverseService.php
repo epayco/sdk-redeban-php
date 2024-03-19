@@ -1,8 +1,8 @@
 <?php
-namespace Epayco\SdkRedeban\services;
+namespace Epayco\SdkRedeban\Services;
 
-use Epayco\SdkRedeban\services\Service;
-use Epayco\SdkRedeban\repositories\RedebanRepository;
+use Epayco\SdkRedeban\Services\Service;
+use Epayco\SdkRedeban\Repositories\RedebanRepository;
 
 class ReverseService extends Service
 {

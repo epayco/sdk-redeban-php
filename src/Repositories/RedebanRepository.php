@@ -1,5 +1,5 @@
 <?php
-namespace Epayco\SdkRedeban\repositories;
+namespace Epayco\SdkRedeban\Repositories;
 
 use Epayco\SdkRedeban\helpers\XmltoArrayHelper;
 
