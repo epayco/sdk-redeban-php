@@ -1,7 +1,7 @@
 <?php
 namespace Epayco\SdkRedeban\Repositories;
 
-use Epayco\SdkRedeban\helpers\XmltoArrayHelper;
+use Epayco\SdkRedeban\Helpers\XmltoArrayHelper;
 
 class RedebanRepository
 {
