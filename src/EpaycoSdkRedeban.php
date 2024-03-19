@@ -6,12 +6,12 @@ use Epayco\SdkRedeban\dto\ProcessTransactionRedebanVentaPresente;
 use Epayco\SdkRedeban\DTOs\ReverseDto;
 use Epayco\SdkRedeban\validations\ProcessTransactionValidation;
 use Epayco\SdkRedeban\services\CompraService;
-use Epayco\SdkRedeban\helpers\HelperResponse;
+use Epayco\SdkRedeban\Helpers\HelperResponse;
 use Epayco\SdkRedeban\dto\ShopDto;
-use Epayco\SdkRedeban\services\ReverseService;
-use Epayco\SdkRedeban\services\ShopService;
-use Epayco\SdkRedeban\validations\ReverseValidation;
-use Epayco\SdkRedeban\validations\ShopValidation;
+use Epayco\SdkRedeban\Services\ReverseService;
+use Epayco\SdkRedeban\Services\ShopService;
+use Epayco\SdkRedeban\Validations\ReverseValidation;
+use Epayco\SdkRedeban\Validations\ShopValidation;
 
 class EpaycoSdkRedeban extends HelperResponse
 {
@@ -42,9 +42,9 @@ class EpaycoSdkRedeban extends HelperResponse
     public function reverseTransaction(ReverseDto $request, $reverseValidation = new ReverseValidation, $reverseService = new ReverseService)
     { 
         if($reverseValidation($request)) {
-            return $this->responseJson($reverseService($reverseValidation->response),$reverseService->outData);
+            return $this->response($reverseService($reverseValidation->response),$reverseService->outData);
         }
-        return $this->responseJsonError($reverseValidation->response);
+        return $this->responseError($reverseValidation->response);
 
     }
 

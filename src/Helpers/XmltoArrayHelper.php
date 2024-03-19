@@ -1,5 +1,5 @@
 <?php
-namespace Epayco\SdkRedeban\helpers;
+namespace Epayco\SdkRedeban\Helpers;
 final class XmltoArrayHelper
 {
 

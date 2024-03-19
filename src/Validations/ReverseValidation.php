@@ -1,6 +1,6 @@
 <?php
 
-namespace Epayco\SdkRedeban\validations;
+namespace Epayco\SdkRedeban\Validations;
 
 use Epayco\SdkRedeban\Validations\Validation;
 use Respect\Validation\Validator as v;

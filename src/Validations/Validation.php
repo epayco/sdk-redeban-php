@@ -1,5 +1,5 @@
 <?php
-namespace Epayco\SdkRedeban\validations;
+namespace Epayco\SdkRedeban\Validations;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Validator as v;
 class Validation

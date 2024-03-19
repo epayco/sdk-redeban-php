@@ -1,5 +1,5 @@
 <?php 
-namespace Epayco\SdkRedeban\services;
+namespace Epayco\SdkRedeban\Services;
 class Service{
 
 }
