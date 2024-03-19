@@ -54,4 +54,4 @@ $reverseDto->additionalData=[
     ]
 ];
 
-echo $sdk->reverseTransaction($reverseDto);
+print_r($sdk->reverseTransaction($reverseDto));
