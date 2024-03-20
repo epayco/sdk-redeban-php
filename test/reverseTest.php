@@ -1,11 +1,11 @@
 <?php
 require '../vendor/autoload.php';
 
-use Epayco\SdkRedeban\EpaycoSdkRedeban;
+use Epayco\SdkRedeban\EpaycoSdkRedebanPresentSales;
 
 use Epayco\SdkRedeban\DTOs\ReverseDto;
 
-$sdk = new EpaycoSdkRedeban();
+$sdk = new EpaycoSdkRedebanPresentSales();
 
 $reverseDto=new ReverseDto();
 
