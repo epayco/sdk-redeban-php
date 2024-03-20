@@ -4,7 +4,6 @@ namespace Epayco\SdkRedeban\Services;
 
 use Epayco\SdkRedeban\Services\Service;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
-use Epayco\SdkRedeban\Validations\VoidValidation;
 
 class VoidService extends Service
 {

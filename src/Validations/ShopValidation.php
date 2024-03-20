@@ -11,23 +11,23 @@ class ShopValidation extends Validation
     public function __invoke($request)
     {
         $requestValidator = [
-            'terminalType' => v::notEmpty()->length(2, 100), 
-            'terminalId' => v::notEmpty()->length(2, 100), 
-            'acquirerId' => v::notEmpty()->length(2, 100), 
-            'terminalTransactionId' => v::notEmpty()->length(2, 100), 
-            'panCaptureMode' => v::notEmpty()->length(2, 100), 
-            'pinCapability' => v::notEmpty()->length(2, 100), 
-            'brand' => v::notEmpty()->length(2, 100), 
-            'trackData' => v::notEmpty()->length(2, 100), 
-            'accountType' => v::stringVal()->notEmpty()->length(2, 100), 
-            'tokenData' => v::notEmpty()->length(2, 100), 
-            'tokenStatus' => v::notEmpty()->length(2, 100), 
-            'discreetData' => v::notEmpty()->length(2, 100), 
+            'terminalType' => v::notEmpty()->length(2, 100),
+            'terminalId' => v::notEmpty()->length(2, 100),
+            'acquirerId' => v::notEmpty()->length(2, 100),
+            'terminalTransactionId' => v::notEmpty()->length(2, 100),
+            'panCaptureMode' => v::notEmpty()->length(2, 100),
+            'pinCapability' => v::notEmpty()->length(2, 100),
+            'brand' => v::notEmpty()->length(2, 100),
+            'trackData' => v::notEmpty()->length(2, 100),
+            'accountType' => v::stringVal()->notEmpty()->length(2, 100),
+            'tokenData' => v::notEmpty()->length(2, 100),
+            'tokenStatus' => v::notEmpty()->length(2, 100),
+            'discreetData' => v::notEmpty()->length(2, 100),
             'totalAmount' => v::notEmpty()->numericVal()->positive(),
             'amountTax' => v::numericVal()->finite(),
-            'detailedAmountType' => v::notEmpty()->length(2, 100), 
+            'detailedAmountType' => v::notEmpty()->length(2, 100),
             'detailedAmount' => v::numericVal()->finite(),
-            'reference' => v::notEmpty()->length(2, 100), 
+            'reference' => v::notEmpty()->length(2, 100),
             'installmentCount' => v::numericVal()->finite(),
         ];
 
@@ -54,5 +54,5 @@ class ShopValidation extends Validation
 
         return $this->validate($requestValidator, $errorMessages, $request);
     }
-    
+
 }

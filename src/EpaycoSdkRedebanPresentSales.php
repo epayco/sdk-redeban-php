@@ -10,6 +10,9 @@ use Epayco\SdkRedeban\Validations\ShopValidation;
 use Epayco\SdkRedeban\DTOs\VoidDto;
 use Epayco\SdkRedeban\Services\VoidService;
 use Epayco\SdkRedeban\Validations\VoidValidation;
+use Epayco\SdkRedeban\DTOs\ReverseDto;
+use Epayco\SdkRedeban\Services\ReverseService;
+use Epayco\SdkRedeban\Validations\ReverseValidation;
 
 class EpaycoSdkRedebanPresentSales extends HelperResponse
 {
@@ -22,22 +25,26 @@ class EpaycoSdkRedebanPresentSales extends HelperResponse
     public function processTransaction(ShopDto $request, $shopValidation = new ShopValidation, $shopService = new ShopService)
     { //compra
         if ($shopValidation($request)) {
-            return $this->responseJson($shopService($shopValidation->response), $shopService->outData);
+            return $this->response($shopService($shopValidation->response), $shopService->outData);
         }
-        return $this->responseJsonError($shopValidation->response);
+        return $this->responseError($shopValidation->response);
 
     }
 
     public function cancelTransaction(VoidDto $request, $voidValidation = new VoidValidation, $voidService = new VoidService)
     { //anular
         if ($voidValidation($request)) {
-            return $this->responseJson($voidService($voidValidation->response), $voidService->outData);
+            return $this->response($voidService($voidValidation->response), $voidService->outData);
         }
-        return $this->responseJson(false, $voidValidation->response);
+        return $this->response(false, $voidValidation->response);
     }
 
-    public function reverseTransaction()
-    { //reverso
+    public function reverseTransaction(ReverseDto $request, $reverseValidation = new ReverseValidation, $reverseService = new ReverseService)
+    { 
+        if($reverseValidation($request)) {
+            return $this->response($reverseService($reverseValidation->response),$reverseService->outData);
+        }
+        return $this->responseError($reverseValidation->response);
 
     }
     public function setUsername($username)

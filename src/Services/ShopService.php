@@ -10,19 +10,19 @@ class ShopService extends Service
     public $outData = [];
     public function __invoke($data)
     {
-        $obj        = json_decode(json_encode($data));
-        $request    = $this->generateRequestShop($obj);
+        $obj = json_decode(json_encode($data));
+        $request = $this->generateRequestShop($obj);
 
-        $redebanRepository  = new RedebanRepository();
+        $redebanRepository = new RedebanRepository();
         $rest = $redebanRepository->shopRequest($request);
 
         $restFinalPos = [];
-        $restPos                = $rest['soapenv:Body']['com:compraProcesarRespuesta'];
-        $restFinalPos['cod']    = $restPos['com:infoRespuesta']['esb:codRespuesta'];
-        $restFinalPos['date']   = $restPos['com:infoCompraResp']['com:fechaTransaccion'];
+        $restPos = $rest['soapenv:Body']['com:compraProcesarRespuesta'];
+        $restFinalPos['cod'] = $restPos['com:infoRespuesta']['esb:codRespuesta'];
+        $restFinalPos['date'] = $restPos['com:infoCompraResp']['com:fechaTransaccion'];
         $restFinalPos['descRes'] = $restPos['com:infoRespuesta']['esb:estado'];
         $restFinalPos['status'] = $restPos['com:infoRespuesta']['esb:descRespuesta'];
-        $this->outData          = $restFinalPos;
+        $this->outData = $restFinalPos;
         return true;
     }
 
