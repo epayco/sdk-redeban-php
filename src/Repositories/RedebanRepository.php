@@ -2,32 +2,110 @@
 
 namespace Epayco\SdkRedeban\Repositories;
 
-use Helpers\Encryption\EncryptionManager;
-use Helpers\Encryption\RSAEncryption;
+use Epayco\SdkRedeban\Adapters\WSSESoapAdapter;
 use Carbon\Carbon;
+use Epayco\SdkRedeban\Helpers\SDKConfig;
 use Gaarf\XmlToPhp\Convertor;
 
 use Epayco\SdkRedeban\Helpers\XmltoArrayHelper;
+use SoapFault;
 
 class RedebanRepository
 {
-    public function shopRequest($data)
+    private SDKConfig $sdkConfig;
+
+    public function __construct()
     {
-        $xmlString = $this->demoResponse();
-        $data = Convertor::covertToArray($xmlString);
-        return $data;
+        $this->sdkConfig = SDKConfig::getInstance();
     }
 
-    public function shop()
+    /**
+     * @throws SoapFault
+     */
+    public function shopRequest($data)
     {
+//        $xmlString = $this->demoResponse();
+//        $dataArray = Convertor::covertToArray($xmlString);
 
-        $data = $this->reverseTest();
-        $rsaEncryption = new RSAEncryption();
-        $encryptionManager = new EncryptionManager($rsaEncryption);
-        $encryptedData = $encryptionManager->encryptData($data, []);
-        // var_dump($encryptedData); die();
-        return $encryptedData;
+        $wsdlPath = 'process/CompraElectronicaService_2.wsdl';
 
+        $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
+
+        $res = $paycoClient->compraProcesar($data);
+        dd('res:', $res);
+        return $res;
+    }
+
+    /**
+     * @throws SoapFault
+     */
+    public function getSoapSecutiryClient($wsdlPath): WSSESoapAdapter
+    {
+        $environment = $this->sdkConfig->getConfig('environment') ?? 'test';
+        $urlWebService = realpath("../../src/Utils/$environment/$wsdlPath");
+
+        $localPrivateKey = $this->sdkConfig->getConfig('localPrivateKey');
+        $localCert = $this->sdkConfig->getConfig('localCert');
+        $serviceCert = $this->sdkConfig->getConfig('redebanCert');
+
+        $certs = $this->generateCertFiles();
+
+        $optionsSecurity = [
+            'cache_wsdl' => WSDL_CACHE_NONE,
+            'trace' => 1,
+            'stream_context' => stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => false,
+                    'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+                    'local_cert' => $certs['local_cert'],
+                    'local_pk' => $certs['local_pk'],
+                    'cafile' => $certs['cafile'],
+                ],
+            ]),
+        ];
+
+        $paycoClient = new WSSESoapAdapter($urlWebService, $optionsSecurity);
+
+        $paycoClient->username = $this->sdkConfig->getConfig('username');
+        $paycoClient->password = $this->sdkConfig->getConfig('password');
+        $paycoClient->localPrivateKey = $localPrivateKey;
+        $paycoClient->localCert = $localCert;
+        $paycoClient->serviceCert = $serviceCert;
+
+        return $paycoClient;
+    }
+
+    public function generateCertFiles(): array
+    {
+        $certs = [];
+        $localPrivateKeyPath = "../../src/Utils/cert/local_key.pem";
+        $localCertPath = "../../src/Utils/cert/local_cert.pem";
+        $serviceCertPath = "../../src/Utils/cert/rbm_cert.pem";
+        if (!file_exists($localPrivateKeyPath)) {
+            file_put_contents(
+                $localPrivateKeyPath,
+                $this->sdkConfig->getConfig('localPrivateKey')
+            );
+        }
+        if (!file_exists($localCertPath)) {
+            file_put_contents(
+                $localCertPath,
+                $this->sdkConfig->getConfig('localCert')
+            );
+        }
+        if (!file_exists($serviceCertPath)) {
+            file_put_contents(
+                $serviceCertPath,
+                $this->sdkConfig->getConfig('serviceCert')
+            );
+        }
+        $certs['local_pk'] = realpath($localPrivateKeyPath);
+        $certs['local_cert'] = realpath($localCertPath);
+        $certs['cafile'] = realpath($serviceCertPath);
+
+        return $certs;
     }
 
     private function demoResponse()
@@ -131,10 +209,6 @@ class RedebanRepository
     function void($objRequest)
     {
         //TODO ejecución del request anular
-
-        // $rsaEncryption = new RSAEncryption();
-        // $encryptionManager = new EncryptionManager($rsaEncryption);
-        // $encryptedData = $encryptionManager->encryptData($objRequest, []);
 
         $xmlString = $this->voidResponse();
         $data = Convertor::covertToArray($xmlString);

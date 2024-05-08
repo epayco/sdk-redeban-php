@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Redeban;
+namespace Epayco\SdkRedeban\Adapters;
 
 use DOMDocument;
 use Exception;
@@ -8,29 +8,25 @@ use RobRichards\WsePhp\WSSESoap;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SoapClient;
 
-class WSSESoapService extends SoapClient
+class WSSESoapAdapter extends SoapClient
 {
     public ?string $username = null;
     public ?string $password = null;
-    public $localCert = null;
-    public $localPrivateKey = null;
-    public $serviceCert = null;
+    public mixed $localCert = null;
+    public mixed $localPrivateKey = null;
+    public mixed $serviceCert = null;
 
     public function __doRequest($request, $location, $action, $version, $oneWay = false): ?string
     {
         try {
             $soapRequest = $this->buildSoapRequest($request);
             $soapResponse = parent::__doRequest($soapRequest, $location, $action, $version);
-            $this->logSoapResponse($soapResponse, $soapRequest);
 
-            $decryptedResponse = $this->decryptSoapResponse($soapResponse);
-            $this->logDecryptedResponse($decryptedResponse);
+            return $this->decryptSoapResponse($soapResponse);
 
-            return $decryptedResponse;
         } catch (Exception $e) {
-            $this->logError($e);
+            return $e->getMessage();
         }
-        return null;
     }
 
     /**
@@ -65,18 +61,6 @@ class WSSESoapService extends SoapClient
         return $wsseSoap->saveXML();
     }
 
-    private function logSoapResponse($response, $request): void
-    {
-        // Log::info(
-        //     "api_rbm_soap_response",
-        //     [
-        //         "rHeaders" => $this->__getLastResponseHeaders(),
-        //         "rResponse" => $response, "request" => $request
-        //     ]
-        // );
-        //TODO log
-    }
-
     /**
      * @throws Exception
      */
@@ -98,23 +82,6 @@ class WSSESoapService extends SoapClient
         $wsseSoap->decryptSoapDoc($doc, $options);
 
         return $doc->saveXML();
-    }
-
-    private function logDecryptedResponse($response): void
-    {
-        // Log::info("api_rbm_soap_response", [
-        //     "decrypt" => $response
-        // ]);
-        //TODO log
-    }
-
-    private function logError(Exception $e): void
-    {
-        // Log::error('API Redeban error', [
-        //     "message" => $e->getMessage(),
-        //     "trace" => $e->getTraceAsString()
-        // ]);
-        //TODO log
     }
 
 }

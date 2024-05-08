@@ -18,6 +18,7 @@ class ShopDto
     public string $tokenStatus;
     public string $discreetData;
     public float $totalAmount;
+    public string $taxType;
     public float $amountTax;
     public string $detailedAmountType;
     public float $detailedAmount;
@@ -39,6 +40,7 @@ class ShopDto
         $this->tokenStatus = "";
         $this->discreetData = "";
         $this->totalAmount = 0;
+        $this->taxType = "";
         $this->amountTax = 0;
         $this->detailedAmountType = "";
         $this->detailedAmount = 0;

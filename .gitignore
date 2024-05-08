@@ -1,3 +1,8 @@
 /vendor/
 .DS_Store
 composer.lock
+/docker-compose-debug.yml
+/DockerfileDebug
+/xdebug.log
+/docker/
+/test/certs/

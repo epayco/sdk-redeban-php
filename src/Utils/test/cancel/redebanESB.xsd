@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://www.rbm.com.co/esb/" xmlns:rbm="http://www.rbm.com.co/esb/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:simpleType name="TipoTipoCuenta">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Ahorros"/>
+      <xsd:enumeration value="Corriente"/>
+      <xsd:enumeration value="CreditoRotativo"/>
+      <xsd:enumeration value="Credito"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoNumTarjeta">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="19"/>
+      <xsd:pattern value="[0-9]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoNumCuenta">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]*"/>
+      <xsd:maxLength value="19"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoTipoDocumento">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CC"/>
+      <xsd:enumeration value="TI"/>
+      <xsd:enumeration value="CE"/>
+      <xsd:enumeration value="NI"/>
+      <xsd:enumeration value="PS"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoNumDocumento">
+    <xsd:restriction base="xsd:long">
+      <xsd:totalDigits value="10"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoTipoImpuesto">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="IVA"/>
+      <xsd:enumeration value="Consumo"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoTipoMontoDetallado">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Propina"/>
+	    <xsd:enumeration value="Descuento"/>									  
+      <xsd:enumeration value="BaseDevolucionIVA"/>
+<xsd:enumeration value="MontoAdicional"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoTipoBolsillo">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Lealtad"/>
+      <xsd:enumeration value="CuotaMonetaria"/>
+      <xsd:enumeration value="CupoCredito"/>
+      <xsd:enumeration value="BonoEfectivo"/>
+      <xsd:enumeration value="CreditoRotativoBolsillo"/>
+      <xsd:enumeration value="BonoRegalo"/>
+      <xsd:enumeration value="BonoDescuento"/>
+      <xsd:enumeration value="BolsilloCredito"/>
+      <xsd:enumeration value="BolsilloDebito"/>
+      <xsd:enumeration value="Ahorros"/>
+      <xsd:enumeration value="Corriente"/>
+      <xsd:enumeration value="Credito"/>
+      <xsd:enumeration value="Desconocida"/>
+      <xsd:enumeration value="CreditoRotativo"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoCodVerficacion">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]*"/>
+      <xsd:maxLength value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoCodBanco">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="4"/>
+      <xsd:pattern value="[0-9]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoCodSeguridadEMV">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoDataEMV">
+    <xsd:restriction base="xsd:hexBinary">
+      <xsd:maxLength value="512"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoClave">
+    <xsd:restriction base="xsd:hexBinary"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoFormatoClave">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="10"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoMonto">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="12"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoCodRespuesta">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="4"/>
+      <xsd:pattern value="[0-9]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoDescripcion">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="128"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoEstado">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="10"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoTipoInfo">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="15"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoNumAprobacion">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="6"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoIdTransaccionAutorizador">
+    <xsd:restriction base="xsd:long">
+      <xsd:totalDigits value="12"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoCodConvenio">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="4"/>
+      <xsd:pattern value="[0-9]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoNumReferenciaPago">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="30"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoNumAutorizacion">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="6"/>
+      <xsd:pattern value="[0-9]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoTrack">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="37"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TipoFIIDEntidad">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="TipoIdPersona">
+    <xsd:sequence minOccurs="1">
+      <xsd:element name="tipoDocumento" type="rbm:TipoTipoDocumento"/>
+      <xsd:element name="numDocumento" type="rbm:TipoNumDocumento"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoIdTarjetaDebitoPrivada">
+    <xsd:sequence>
+      <xsd:element name="franquicia" type="xsd:string"/>
+      <xsd:element name="numTarjeta" type="rbm:TipoNumTarjeta"/>
+      <xsd:element name="tipoBolsillo" type="rbm:TipoTipoBolsillo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoIdTarjetaCreditoPrivada">
+    <xsd:sequence>
+      <xsd:element name="franquicia" type="xsd:string"/>
+      <xsd:element name="numTarjeta" type="rbm:TipoNumTarjeta"/>
+      <xsd:element name="tipoBolsillo" type="rbm:TipoTipoBolsillo"/>
+      <xsd:element minOccurs="0" name="codVerificacion" type="rbm:TipoCodVerficacion"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoIdTarjetaCredito">
+    <xsd:sequence>
+      <xsd:element name="franquicia" type="xsd:string"/>
+      <xsd:element name="numTarjeta" type="rbm:TipoNumTarjeta"/>
+      <xsd:element minOccurs="0" name="fechaExpiracion" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="codVerificacion" type="rbm:TipoCodVerficacion"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoIdTarjetaDebito">
+    <xsd:sequence>
+      <xsd:element name="franquicia" type="xsd:string"/>
+      <xsd:element name="numTarjeta" type="rbm:TipoNumTarjeta"/>
+      <xsd:element minOccurs="0" name="fechaExpiracion" type="xsd:date"/>
+      <xsd:element minOccurs="0" name="codVerificacion" type="rbm:TipoCodVerficacion"/>
+    </xsd:sequence>
+  </xsd:complexType>																										 
+  <xsd:complexType name="TipoIdCuenta">
+    <xsd:sequence>
+      <xsd:element name="tipoCuenta" type="rbm:TipoTipoCuenta"/>
+      <xsd:element name="numCuenta" type="rbm:TipoNumCuenta"/>
+      <xsd:element name="codBanco" type="rbm:TipoCodBanco"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoCHIP">
+    <xsd:sequence>
+      <xsd:element name="codSeguridadEMV" type="rbm:TipoCodSeguridadEMV"/>
+      <xsd:element name="dataEMV" type="rbm:TipoDataEMV"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoAutenticacion">
+    <xsd:sequence>
+      <xsd:element name="clave" type="rbm:TipoClave"/>
+      <xsd:element name="formatoClave" type="rbm:TipoFormatoClave"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoImpuestos">
+    <xsd:sequence>
+      <xsd:element name="tipoImpuesto" type="rbm:TipoTipoImpuesto"/>
+      <xsd:element name="monto" type="rbm:TipoMonto"/>
+      <xsd:element minOccurs="0" name="baseImpuesto" type="rbm:TipoMonto"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoMontoDetallado">
+    <xsd:sequence>
+      <xsd:element name="tipoMontoDetallado" type="rbm:TipoTipoMontoDetallado"/>
+      <xsd:element name="monto" type="rbm:TipoMonto"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoRespuesta">
+    <xsd:sequence>
+      <xsd:element name="codRespuesta" type="rbm:TipoCodRespuesta"/>
+      <xsd:element name="descRespuesta" type="rbm:TipoDescripcion"/>
+      <xsd:element name="estado" type="rbm:TipoEstado"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoAdicional">
+    <xsd:sequence>
+      <xsd:element name="tipoInfo" type="rbm:TipoTipoInfo"/>
+      <xsd:element name="descripcion" type="rbm:TipoDescripcion"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoRefCancelacion">
+    <xsd:sequence>
+      <xsd:element name="numAprobacion" type="rbm:TipoNumAprobacion"/>
+      <xsd:element name="idTransaccionAutorizador" type="rbm:TipoIdTransaccionAutorizador"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoPago">
+    <xsd:sequence>
+      <xsd:element name="FIIDEntidadAdquiriente" type="rbm:TipoFIIDEntidad"/>
+      <xsd:element name="numAutorizacion" type="rbm:TipoNumAutorizacion"/>
+      <xsd:element name="codConvenioRecaudo" type="rbm:TipoCodConvenio"/>
+      <xsd:element name="numReferenciaPago" type="rbm:TipoNumReferenciaPago"/>
+      <xsd:element name="monto" type="rbm:TipoMonto"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoIdTrack">
+    <xsd:sequence>
+	  <xsd:element name="Franquicia" type="xsd:string"/>
+      <xsd:element name="track" type="rbm:TipoTrack"/>
+      <xsd:element name="tipoCuenta" type="rbm:TipoTipoBolsillo"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoUbicacion">
+    <xsd:sequence>
+      <xsd:element name="ciudad" type="xsd:string"/>
+      <xsd:element name="departamento" type="xsd:string"/>
+      <xsd:element name="pais" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoPersona">
+    <xsd:sequence>
+      <xsd:element name="direccion" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="ciudad" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="departamento" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="emailComercio" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="telefonoFijo" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="celular" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoEMV">
+    <xsd:sequence>
+      <xsd:element name="datosToken" type="xsd:string"/>
+      <xsd:element name="datosDiscretos" type="xsd:string"/>
+      <xsd:element name="estadoToken" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipodatosAdicionales">
+    <xsd:sequence>
+      <xsd:element name="tipo" type="xsd:string"/>
+      <xsd:element name="valor" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TipoInfoFacilitador">
+    <xsd:sequence>
+      <xsd:element name="marcTerminal" type="xsd:string"/>
+      <xsd:element name="FacilitadorID" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="SalesOrgID" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="SubMerchID" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+<xsd:complexType name="TipoInfoTokenizacion">
+    <xsd:sequence>
+      <xsd:element name="Crypto" type="xsd:string"/>
+      <xsd:element name="url" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="idTokenRequestor" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>							  
+</xsd:schema>

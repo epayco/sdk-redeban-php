@@ -3,9 +3,11 @@ namespace Epayco\SdkRedeban\Helpers;
 
 class DataConfigSdkRedeban
 {
-    public $username;
-    public $password;
-    public $localCert;
-    public $localPrivateKey;
-    public $publicKey;
+    public string $username;
+    public string $password;
+    public mixed $localCert;
+    public mixed $localPrivateKey;
+    public mixed $redebanCert;
+    public string $environment;
+    public mixed $logger;
 }
