@@ -5,6 +5,7 @@ namespace Epayco\SdkRedeban;
 use Epayco\SdkRedeban\Helpers\HelperResponse;
 use Epayco\SdkRedeban\Helpers\DataConfigSdkRedeban;
 use Epayco\SdkRedeban\DTOs\ShopDto;
+use Epayco\SdkRedeban\Helpers\SDKConfig;
 use Epayco\SdkRedeban\Services\ShopService;
 use Epayco\SdkRedeban\Validations\ShopValidation;
 use Epayco\SdkRedeban\DTOs\VoidDto;
@@ -13,16 +14,25 @@ use Epayco\SdkRedeban\Validations\VoidValidation;
 use Epayco\SdkRedeban\DTOs\ReverseDto;
 use Epayco\SdkRedeban\Services\ReverseService;
 use Epayco\SdkRedeban\Validations\ReverseValidation;
+use SoapFault;
 
 class EpaycoSdkRedebanPresentSales extends HelperResponse
 {
     private DataConfigSdkRedeban $dataConfigSdkRedeban;
+//    private SDKConfig $SDKConfig;
 
     public function __construct()
     {
         $this->dataConfigSdkRedeban = new DataConfigSdkRedeban();
     }
-    public function processTransaction(ShopDto $request, $shopValidation = new ShopValidation, $shopService = new ShopService)
+
+    /**
+     * @throws SoapFault
+     */
+    public function processTransaction(
+        ShopDto $request,
+        $shopValidation = new ShopValidation,
+        $shopService = new ShopService)
     { //compra
         if ($shopValidation($request)) {
             return $this->response($shopService($shopValidation->response), $shopService->outData);
@@ -50,26 +60,45 @@ class EpaycoSdkRedebanPresentSales extends HelperResponse
     public function setUsername($username)
     {
         $this->dataConfigSdkRedeban->username = $username;
+        SDKConfig::getInstance()->setConfig('username', $username);
         return $this;
     }
     public function setPassword($password)
     {
         $this->dataConfigSdkRedeban->password = $password;
+        SDKConfig::getInstance()->setConfig('password', $password);
         return $this;
     }
-    public function setLocalPublicKey($localCert)
+    public function setLocalCert($localCert)
     {
         $this->dataConfigSdkRedeban->localCert = $localCert;
+        SDKConfig::getInstance()->setConfig('localCert', $localCert);
         return $this;
     }
     public function setLocalPrivateKey($localPrivateKey)
     {
         $this->dataConfigSdkRedeban->localPrivateKey = $localPrivateKey;
+        SDKConfig::getInstance()->setConfig('localPrivateKey', $localPrivateKey);
         return $this;
     }
-    public function setPublicKey($publicKey)
+    public function setRedebanCert($redebanCert)
     {
-        $this->dataConfigSdkRedeban->publicKey = $publicKey;
+        $this->dataConfigSdkRedeban->redebanCert = $redebanCert;
+        SDKConfig::getInstance()->setConfig('redebanCert', $redebanCert);
+        return $this;
+    }
+
+    public function setEnvironment($environment)
+    {
+        $this->dataConfigSdkRedeban->environment = $environment;
+        SDKConfig::getInstance()->setConfig('environment', $environment);
+        return $this;
+    }
+
+    public function setLogger($logger)
+    {
+        $this->dataConfigSdkRedeban->logger = $logger;
+        SDKConfig::getInstance()->setConfig('logger', $logger);
         return $this;
     }
 }

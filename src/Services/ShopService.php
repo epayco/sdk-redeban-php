@@ -4,10 +4,16 @@ namespace Epayco\SdkRedeban\Services;
 
 use Epayco\SdkRedeban\Services\Service;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
+use SoapFault;
+use stdClass;
 
 class ShopService extends Service
 {
-    public $outData = [];
+    public array $outData = [];
+
+    /**
+     * @throws SoapFault
+     */
     public function __invoke($data)
     {
         $obj = json_decode(json_encode($data));
@@ -15,6 +21,8 @@ class ShopService extends Service
 
         $redebanRepository = new RedebanRepository();
         $rest = $redebanRepository->shopRequest($request);
+
+        dd($rest);
 
         $restFinalPos = [];
         $restPos = $rest['soapenv:Body']['com:compraProcesarRespuesta'];
@@ -27,51 +35,49 @@ class ShopService extends Service
     }
 
 
-    private function generateRequestShop($obj)
+    private function generateRequestShop($obj): stdClass
     {
+        $compraProcesarSolicitud = new stdClass();
+        $compraProcesarSolicitud->cabeceraSolicitud = new stdClass();
+        $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion = new stdClass();
+        $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->tipoTerminal = $obj->terminalType;
+        $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->idTerminal = $obj->terminalId;
+        $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->idAdquiriente = $obj->acquirerId;
+        //TODO: idTransaccionTerminal se suma en cada transaction
+//        $trxIdTerminal = $configSitio->id_tran_terminal ?? 1;
+        $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion
+            ->idTransaccionTerminal = $obj->terminalTransactionId;
+        $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->modoCapturaPAN = $obj->panCaptureMode;
+        $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->capacidadPIN = $obj->pinCapability;
 
-        $arr = [
-            'compraProcesarSolicitud' => [
-                'cabeceraSolicitud' => [
-                    'infoPuntoInteraccion' => [
-                        'tipoTerminal' => $obj->terminalType,
-                        'idTerminal' => $obj->terminalId,
-                        'idAdquiriente' => $obj->acquirerId,
-                        'idTransaccionTerminal' => $obj->terminalTransactionId,
-                        'modoCapturaPAN' => $obj->panCaptureMode,
-                        'capacidadPIN' => $obj->pinCapability,
-                    ],
-                ],
-                'infoMedioPago' => [
-                    'idTrack' => [
-                        'Franquicia' => $obj->brand,
-                        'track' => $obj->trackData,
-                        'tipoCuenta' => $obj->accountType,
-                    ],
-                    'infoEMV' => [
-                        'datosToken' => $obj->tokenData,
-                        'datosDiscretos' => $obj->discreetData,
-                        'estadoToken' => $obj->tokenStatus,
-                    ],
-                ],
-                'infoCompra' => [
-                    'montoTotal' => $obj->totalAmount,
-                    'infoImpuestos' => [
-                        ['tipoImpuesto' => "IVA", 'monto' => $obj->amountTax]
-                    ],
-                    'montoDetallado' => [
-                        ['tipoMontoDetallado' => $obj->detailedAmountType, 'monto' => $obj->detailedAmount],
-                    ],
-                    'referencia' => $obj->reference,
-                    'cantidadCuotas' => $obj->installmentCount,
-                ],
-                // 'datosAdicionales' => [
-                //     ['tipo' => $obj->additionalData[0]->type, 'valor' => $obj->additionalData[0]->value],
-                //     ['tipo' => $obj->additionalData[1]->type, 'valor' => $obj->additionalData[1]->value],
-                // ],
-            ],
-        ];
+        $compraProcesarSolicitud->infoMedioPago = new stdClass();
+        $compraProcesarSolicitud->infoMedioPago->idTrack = new stdClass();
+        $compraProcesarSolicitud->infoMedioPago->idTrack->Franquicia = $obj->brand;
+        $compraProcesarSolicitud->infoMedioPago->idTrack->track = $obj->trackData;
+        $compraProcesarSolicitud->infoMedioPago->idTrack->tipoCuenta = $obj->accountType;
 
-        return json_decode(json_encode($arr)); //converter all array to object
+        $compraProcesarSolicitud->infoMedioPago->infoEMV = new stdClass();
+        $compraProcesarSolicitud->infoMedioPago->infoEMV->datosToken = $obj->tokenData;
+        $compraProcesarSolicitud->infoMedioPago->infoEMV->datosDiscretos = $obj->discreetData;
+        $compraProcesarSolicitud->infoMedioPago->infoEMV->estadoToken = $obj->tokenStatus;
+
+        $compraProcesarSolicitud->infoCompra = new stdClass();
+        $compraProcesarSolicitud->infoCompra->montoTotal = $obj->totalAmount;
+        $compraProcesarSolicitud->infoCompra->referencia = $obj->reference; // ref payco
+        $compraProcesarSolicitud->infoCompra->cantidadCuotas = $obj->installmentCount;
+
+        $compraProcesarSolicitud->infoCompra->infoImpuestos = new stdClass();
+        $compraProcesarSolicitud->infoCompra->infoImpuestos->tipoImpuesto = $obj->taxType;
+        $compraProcesarSolicitud->infoCompra->infoImpuestos->monto = $obj->amountTax;
+
+        $compraProcesarSolicitud->infoCompra->montoDetallado = new stdClass();
+        $compraProcesarSolicitud->infoCompra->montoDetallado->tipoMontoDetallado = $obj->detailedAmountType;
+        $compraProcesarSolicitud->infoCompra->montoDetallado->monto = $obj->detailedAmount;
+
+        $compraProcesarSolicitud->datosAdicionales = new stdClass();
+        $compraProcesarSolicitud->datosAdicionales->tipo = 'C4';
+        $compraProcesarSolicitud->datosAdicionales->valor = '';
+
+        return $compraProcesarSolicitud;
     }
 }

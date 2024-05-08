@@ -18,15 +18,16 @@
 		"php": "^8.2",
 		"ext-dom": "*",
 		"ext-soap": "*",
-		"firebase/php-jwt": "^6.10",
-		"gree/jose": "^2.2",
-		"lcobucci/jwt": "^5.2",
-		"lexik/jwt-authentication-bundle": "^2.20",
+		"ext-json": "*",
+		"ext-mbstring": "*",
+		"firebase/php-jwt": "^5.0",
 		"robrichards/wse-php": "^2.0",
 		"robrichards/xmlseclibs": "^3.1",
 		"respect/validation": "^2.3",
 		"web-token/jwt-framework": "^3.3",
 		"nesbot/carbon": "^2.16",
-		"gaarf/xml-to-php-array": "^1.0"
+		"gaarf/xml-to-php-array": "^1.0",
+		"ext-openssl": "*",
+		"web-token/jwt-encryption-algorithm-aescbc": "*"
 	}
 }

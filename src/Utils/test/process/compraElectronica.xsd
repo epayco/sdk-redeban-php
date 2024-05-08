@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://www.rbm.com.co/esb/comercio/compra/" xmlns:cmp="http://www.rbm.com.co/esb/comercio/compra/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="compra.xsd"/>
+  <xsd:element name="compraProcesarSolicitud" type="cmp:TipoSolicitudCompra"/>
+  <xsd:element name="compraProcesarRespuesta" type="cmp:TipoRespuesta"/>
+  <xsd:element name="compraReversarSolicitud" type="cmp:TipoSolicitudCompra"/>
+  <xsd:element name="compraReversarRespuesta" type="cmp:TipoRespuesta"/>
+</xsd:schema>
