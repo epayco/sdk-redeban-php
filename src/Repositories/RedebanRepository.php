@@ -31,9 +31,7 @@ class RedebanRepository
 
         $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
 
-        $res = $paycoClient->compraProcesar($data);
-        dd('res:', $res);
-        return $res;
+        return $paycoClient->compraProcesar($data);
     }
 
     /**
