@@ -13,7 +13,7 @@ use SoapFault;
 class RedebanRepository
 {
     private SDKConfig $sdkConfig;
-    private string $sdkRealPath = '';
+    private string $sdkRealPath;
 
     public function __construct()
     {
