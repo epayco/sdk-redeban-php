@@ -13,10 +13,12 @@ use SoapFault;
 class RedebanRepository
 {
     private SDKConfig $sdkConfig;
+    private string $sdkRealPath;
 
     public function __construct()
     {
         $this->sdkConfig = SDKConfig::getInstance();
+        $this->sdkRealPath = realpath(__DIR__ . '/..');
     }
 
     /**
@@ -40,7 +42,8 @@ class RedebanRepository
     public function getSoapSecutiryClient($wsdlPath): WSSESoapAdapter
     {
         $environment = $this->sdkConfig->getConfig('environment') ?? 'test';
-        $urlWebService = realpath("../../src/Utils/$environment/$wsdlPath");
+
+        $urlWebService = realpath("$this->sdkRealPath/Utils/$environment/$wsdlPath");
 
         $localPrivateKey = $this->sdkConfig->getConfig('localPrivateKey');
         $localCert = $this->sdkConfig->getConfig('localCert');
@@ -78,9 +81,9 @@ class RedebanRepository
     public function generateCertFiles(): array
     {
         $certs = [];
-        $localPrivateKeyPath = "../../src/Utils/cert/local_key.pem";
-        $localCertPath = "../../src/Utils/cert/local_cert.pem";
-        $serviceCertPath = "../../src/Utils/cert/rbm_cert.pem";
+        $localPrivateKeyPath = $this->sdkRealPath . "/Utils/cert/local_key.pem";
+        $localCertPath = $this->sdkRealPath . "/Utils/cert/local_cert.pem";
+        $serviceCertPath = $this->sdkRealPath . "/Utils/cert/rbm_cert.pem";
         if (!file_exists($localPrivateKeyPath)) {
             file_put_contents(
                 $localPrivateKeyPath,
