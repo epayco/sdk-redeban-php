@@ -22,7 +22,7 @@ class ShopService extends Service
         $restFinalPos = [];
         $redebanRepository = new RedebanRepository();
         $rest=[];
-        $error=false;
+       
         try{
             $rest = $redebanRepository->shopRequest($request);
             $restPos                 = $rest['soapenv:Body']['com:compraProcesarRespuesta'];
@@ -31,12 +31,12 @@ class ShopService extends Service
             $restFinalPos['descRes'] = $restPos['com:infoRespuesta']['esb:estado'];
             $restFinalPos['status']  = $restPos['com:infoRespuesta']['esb:descRespuesta'];
         }catch(Exception $e){
-            $error=true;
+            //
         }
         $restFinalPos['log_request']    = $request;
         $restFinalPos['log_response']   = $rest;
         $this->outData = $restFinalPos;
-        return $error;
+        return true;
     }
 
 
