@@ -4,6 +4,7 @@ namespace Epayco\SdkRedeban\Services;
 
 use Epayco\SdkRedeban\Services\Service;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
+use Exception;
 use SoapFault;
 use stdClass;
 
@@ -18,20 +19,24 @@ class ShopService extends Service
     {
         $obj = json_decode(json_encode($data));
         $request = $this->generateRequestShop($obj);
-
-        $redebanRepository = new RedebanRepository();
-        $rest = $redebanRepository->shopRequest($request);
-
-        dd($rest);
-
         $restFinalPos = [];
-        $restPos = $rest['soapenv:Body']['com:compraProcesarRespuesta'];
-        $restFinalPos['cod'] = $restPos['com:infoRespuesta']['esb:codRespuesta'];
-        $restFinalPos['date'] = $restPos['com:infoCompraResp']['com:fechaTransaccion'];
-        $restFinalPos['descRes'] = $restPos['com:infoRespuesta']['esb:estado'];
-        $restFinalPos['status'] = $restPos['com:infoRespuesta']['esb:descRespuesta'];
+        $redebanRepository = new RedebanRepository();
+        $rest=[];
+        $error=false;
+        try{
+            $rest = $redebanRepository->shopRequest($request);
+            $restPos                 = $rest['soapenv:Body']['com:compraProcesarRespuesta'];
+            $restFinalPos['cod']     = $restPos['com:infoRespuesta']['esb:codRespuesta'];
+            $restFinalPos['date']    = $restPos['com:infoCompraResp']['com:fechaTransaccion'];
+            $restFinalPos['descRes'] = $restPos['com:infoRespuesta']['esb:estado'];
+            $restFinalPos['status']  = $restPos['com:infoRespuesta']['esb:descRespuesta'];
+        }catch(Exception $e){
+            $error=true;
+        }
+        $restFinalPos['log_request']    = $request;
+        $restFinalPos['log_response']   = $rest;
         $this->outData = $restFinalPos;
-        return true;
+        return $error;
     }
 
 
