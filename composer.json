@@ -20,7 +20,6 @@
 		"ext-soap": "*",
 		"ext-json": "*",
 		"ext-mbstring": "*",
-		"firebase/php-jwt": "^5.0",
 		"robrichards/wse-php": "^2.0",
 		"robrichards/xmlseclibs": "^3.1",
 		"respect/validation": "^2.3",
@@ -29,5 +28,8 @@
 		"gaarf/xml-to-php-array": "^1.0",
 		"ext-openssl": "*",
 		"web-token/jwt-encryption-algorithm-aescbc": "*"
+	},
+	"scripts": {
+		"post-install-cmd": "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\" && php composer-setup.php --install-dir=bin --filename=composer && php -r \"unlink('composer-setup.php');\" && composer install"
 	}
 }
