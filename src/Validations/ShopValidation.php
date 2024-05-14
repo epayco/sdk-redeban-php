@@ -20,7 +20,7 @@ class ShopValidation extends Validation
             'brand' => v::notEmpty()->length(2, 100),
             'trackData' => v::notEmpty()->length(2, 100),
             'accountType' => v::stringVal()->notEmpty()->length(2, 100),
-            'tokenData' => v::notEmpty()->length(2, 100),
+            'tokenData' => v::notEmpty()->length(2, 200),
             'tokenStatus' => v::notEmpty()->length(2, 100),
             'discreetData' => v::notEmpty()->length(2, 100),
             'totalAmount' => v::notEmpty()->numericVal()->positive(),

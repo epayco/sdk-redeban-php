@@ -2,27 +2,31 @@
 
 namespace Epayco\SdkRedeban\Services;
 
-use Epayco\SdkRedeban\Services\Service;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
-use SoapFault;
+use Exception;
 use stdClass;
 
 class ShopService extends Service
 {
     public mixed $outData;
-
-    /**
-     * @throws SoapFault
-     */
     public function __invoke($data)
     {
+        $restFinalPos = [];
         $obj = json_decode(json_encode($data));
         $request = $this->generateRequestShop($obj);
-
-        $redebanRepository = new RedebanRepository();
-        $this->outData = $redebanRepository->shopRequest($request);
-
-        return !empty($this->outData);
+        try {
+            $redebanRepository = new RedebanRepository();
+            $redebanResponse = $redebanRepository->shopRequest($request);
+            $restFinalPos = (array)$redebanResponse;
+            $status = !empty($redebanResponse);
+        } catch(Exception $e){
+            $redebanResponse = $e;
+            $status = false;
+        }
+        $restFinalPos['log_request']    = $request;
+        $restFinalPos['log_response']   = $redebanResponse ?? null;
+        $this->outData = $restFinalPos;
+        return $status;
     }
 
 
