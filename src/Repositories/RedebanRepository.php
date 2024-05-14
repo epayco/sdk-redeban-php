@@ -26,9 +26,6 @@ class RedebanRepository
      */
     public function shopRequest($data)
     {
-//        $xmlString = $this->demoResponse();
-//        $dataArray = Convertor::covertToArray($xmlString);
-
         $wsdlPath = 'process/CompraElectronicaService_2.wsdl';
 
         $paycoClient = $this->getSoapSecutiryClient($wsdlPath);

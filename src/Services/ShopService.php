@@ -9,7 +9,7 @@ use stdClass;
 
 class ShopService extends Service
 {
-    public array $outData = [];
+    public mixed $outData;
 
     /**
      * @throws SoapFault
@@ -20,18 +20,9 @@ class ShopService extends Service
         $request = $this->generateRequestShop($obj);
 
         $redebanRepository = new RedebanRepository();
-        $rest = $redebanRepository->shopRequest($request);
+        $this->outData = $redebanRepository->shopRequest($request);
 
-        dd($rest);
-
-        $restFinalPos = [];
-        $restPos = $rest['soapenv:Body']['com:compraProcesarRespuesta'];
-        $restFinalPos['cod'] = $restPos['com:infoRespuesta']['esb:codRespuesta'];
-        $restFinalPos['date'] = $restPos['com:infoCompraResp']['com:fechaTransaccion'];
-        $restFinalPos['descRes'] = $restPos['com:infoRespuesta']['esb:estado'];
-        $restFinalPos['status'] = $restPos['com:infoRespuesta']['esb:descRespuesta'];
-        $this->outData = $restFinalPos;
-        return true;
+        return !empty($this->outData);
     }
 
 
