@@ -2,40 +2,29 @@
 
 namespace Epayco\SdkRedeban\Services;
 
-use Epayco\SdkRedeban\Services\Service;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
 use Exception;
-use SoapFault;
 use stdClass;
 
 class ShopService extends Service
 {
-    public array $outData = [];
-
-    /**
-     * @throws SoapFault
-     */
+    public mixed $outData;
     public function __invoke($data)
     {
+        $restFinalPos = [];
         $obj = json_decode(json_encode($data));
         $request = $this->generateRequestShop($obj);
-        $restFinalPos = [];
-        $redebanRepository = new RedebanRepository();
-        $rest=[];
-        $status=true;
-        try{
-            $rest = $redebanRepository->shopRequest($request);
-            $restPos                 = $rest['soapenv:Body']['com:compraProcesarRespuesta'];
-            $restFinalPos['cod']     = $restPos['com:infoRespuesta']['esb:codRespuesta'];
-            $restFinalPos['date']    = $restPos['com:infoCompraResp']['com:fechaTransaccion'];
-            $restFinalPos['descRes'] = $restPos['com:infoRespuesta']['esb:estado'];
-            $restFinalPos['status']  = $restPos['com:infoRespuesta']['esb:descRespuesta'];
-        }catch(Exception $e){
-            $rest['error']=$e;
-            $status=false;
+        try {
+            $redebanRepository = new RedebanRepository();
+            $redebanResponse = $redebanRepository->shopRequest($request);
+            $restFinalPos = (array)$redebanResponse;
+            $status = !empty($redebanResponse);
+        } catch(Exception $e){
+            $redebanResponse = $e;
+            $status = false;
         }
         $restFinalPos['log_request']    = $request;
-        $restFinalPos['log_response']   = $rest;
+        $restFinalPos['log_response']   = $redebanResponse ?? null;
         $this->outData = $restFinalPos;
         return $status;
     }
