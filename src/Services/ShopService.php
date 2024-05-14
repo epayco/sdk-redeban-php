@@ -18,7 +18,7 @@ class ShopService extends Service
             $redebanRepository = new RedebanRepository();
             $redebanResponse = $redebanRepository->shopRequest($request);
             $restFinalPos = (array)$redebanResponse;
-            $status = !empty($redebanResponse);
+            $status = isset($redebanResponse->infoRespuesta->codRespuesta) && $redebanResponse->infoRespuesta->codRespuesta == '00';
         } catch(Exception $e){
             $redebanResponse = $e;
             $status = false;
