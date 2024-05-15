@@ -9,5 +9,4 @@ class DataConfigSdkRedeban
     public mixed $localPrivateKey;
     public mixed $redebanCert;
     public string $environment;
-    public mixed $logger;
 }
