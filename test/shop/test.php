@@ -16,8 +16,7 @@ $sdk->setUsername("TestAliEpayco")
     ->setLocalCert($localCert)
     ->setLocalPrivateKey($localPrivateKey)
     ->setRedebanCert($redebanKey)
-    ->setEnvironment("test")
-    ->setLogger("Logger");
+    ->setEnvironment("test");
 
 $shopRequest = new ShopDto;
 

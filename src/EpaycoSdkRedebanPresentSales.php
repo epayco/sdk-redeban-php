@@ -94,11 +94,4 @@ class EpaycoSdkRedebanPresentSales extends HelperResponse
         SDKConfig::getInstance()->setConfig('environment', $environment);
         return $this;
     }
-
-    public function setLogger($logger)
-    {
-        $this->dataConfigSdkRedeban->logger = $logger;
-        SDKConfig::getInstance()->setConfig('logger', $logger);
-        return $this;
-    }
 }
