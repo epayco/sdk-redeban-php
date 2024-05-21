@@ -2,38 +2,32 @@
 
 namespace Epayco\SdkRedeban;
 
-use Epayco\SdkRedeban\Helpers\HelperResponse;
-use Epayco\SdkRedeban\Helpers\DataConfigSdkRedeban;
+use Epayco\SdkRedeban\DTOs\DataConfigSdkDto;
 use Epayco\SdkRedeban\DTOs\ShopDto;
-use Epayco\SdkRedeban\Helpers\SDKConfig;
-use Epayco\SdkRedeban\Services\ShopService;
-use Epayco\SdkRedeban\Validations\ShopValidation;
 use Epayco\SdkRedeban\DTOs\VoidDto;
-use Epayco\SdkRedeban\Services\VoidService;
-use Epayco\SdkRedeban\Validations\VoidValidation;
-use Epayco\SdkRedeban\DTOs\ReverseDto;
+use Epayco\SdkRedeban\Helpers\HelperResponse;
+use Epayco\SdkRedeban\Helpers\SDKConfig;
 use Epayco\SdkRedeban\Services\ReverseService;
+use Epayco\SdkRedeban\Services\ShopService;
+use Epayco\SdkRedeban\Services\VoidService;
 use Epayco\SdkRedeban\Validations\ReverseValidation;
-use SoapFault;
+use Epayco\SdkRedeban\Validations\ShopValidation;
+use Epayco\SdkRedeban\Validations\VoidValidation;
 
 class EpaycoSdkRedebanPresentSales extends HelperResponse
 {
-    private DataConfigSdkRedeban $dataConfigSdkRedeban;
-//    private SDKConfig $SDKConfig;
+    private DataConfigSdkDto $dataConfigSdkRedeban;
 
     public function __construct()
     {
-        $this->dataConfigSdkRedeban = new DataConfigSdkRedeban();
+        $this->dataConfigSdkRedeban = new DataConfigSdkDto();
     }
 
-    /**
-     * @throws SoapFault
-     */
     public function processTransaction(
         ShopDto $request,
         $shopValidation = new ShopValidation,
         $shopService = new ShopService)
-    { //compra
+    {
         if ($shopValidation($request)) {
             return $this->response($shopService($shopValidation->response), $shopService->outData);
         }
@@ -49,10 +43,10 @@ class EpaycoSdkRedebanPresentSales extends HelperResponse
         return $this->response(false, $voidValidation->response);
     }
 
-    public function reverseTransaction(ReverseDto $request, $reverseValidation = new ReverseValidation, $reverseService = new ReverseService)
-    { 
-        if($reverseValidation($request)) {
-            return $this->response($reverseService($reverseValidation->response),$reverseService->outData);
+    public function reverseTransaction(ShopDto $request, $reverseValidation = new ReverseValidation, $reverseService = new ReverseService)
+    {
+        if ($reverseValidation($request)) {
+            return $this->response($reverseService($reverseValidation->response), $reverseService->outData);
         }
         return $this->responseError($reverseValidation->response);
 

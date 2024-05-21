@@ -3,11 +3,9 @@
 namespace Epayco\SdkRedeban\Repositories;
 
 use Epayco\SdkRedeban\Adapters\WSSESoapAdapter;
-use Carbon\Carbon;
 use Epayco\SdkRedeban\Helpers\SDKConfig;
 use Gaarf\XmlToPhp\Convertor;
 
-use Epayco\SdkRedeban\Helpers\XmltoArrayHelper;
 use SoapFault;
 
 class RedebanRepository
@@ -24,13 +22,25 @@ class RedebanRepository
     /**
      * @throws SoapFault
      */
-    public function shopRequest($data)
+    public function purchase($data)
     {
         $wsdlPath = 'process/CompraElectronicaService_2.wsdl';
 
         $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
 
         return $paycoClient->compraProcesar($data);
+    }
+
+    /**
+     * @throws SoapFault
+     */
+    public function reverse($data)
+    {
+        $wsdlPath = 'process/CompraElectronicaService_2.wsdl';
+
+        $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
+
+        return $paycoClient->compraReversar($data);
     }
 
     /**
@@ -106,65 +116,6 @@ class RedebanRepository
         return $certs;
     }
 
-    private function demoResponse()
-    {
-        return '<soapenv:Envelope xmlns:com1="http://www.rbm.com.co/esb/comercio/" xmlns:esb="http://www.rbm.com.co/esb/" xmlns:com="http://www.rbm.com.co/esb/comercio/compra/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-            <soapenv:Body>
-                <com:compraProcesarRespuesta>
-                    <com:cabeceraRespuesta>
-                        <com:infoPuntoInteraccion>
-                            <com1:tipoTerminal>WEB</com1:tipoTerminal>
-                            <com1:idTerminal>ESB10001</com1:idTerminal>
-                            <com1:idAdquiriente>0010203040</com1:idAdquiriente>
-                            <com1:idTransaccionTerminal>999998</com1:idTransaccionTerminal>
-                            <com1:modoCapturaPAN>CHIP</com1:modoCapturaPAN>
-                            <com1:capacidadPIN>Permitido</com1:capacidadPIN>
-                        </com:infoPuntoInteraccion>
-                    </com:cabeceraRespuesta>
-                    <com:infoRespuesta>
-                        <esb:codRespuesta>00</esb:codRespuesta>
-                        <esb:descRespuesta>Aprobado</esb:descRespuesta>
-                        <esb:estado>Aprobado</esb:estado>
-                    </com:infoRespuesta>
-                    <com:infoCompraResp>
-                        <com:fechaTransaccion>2019-08-01T10:25:48</com:fechaTransaccion>
-                        <com:fechaPosteo>2019-08-01</com:fechaPosteo>
-                        <com:numAprobacion>025490</com:numAprobacion>
-                        <com:infoAdicional>
-                            <esb:tipoInfo>datosToken</esb:tipoInfo>
-                            <esb:descripcion>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</esb:descripcion>
-                        </com:infoAdicional>
-                    </com:infoCompraResp>
-                    <com:idTransaccionAutorizador>000000999998</com:idTransaccionAutorizador>
-                    <com:infoTerminal>
-                        <com1:nombreAdquiriente>NOMBRE ALIADOPOS</com1:nombreAdquiriente>
-                        <com1:infoUbicacion>
-                            <esb:ciudad>1100100 BOGOT</esb:ciudad>
-                            <esb:departamento>BOG</esb:departamento>
-                            <esb:pais>CO</esb:pais>
-                        </com1:infoUbicacion>
-                    </com:infoTerminal>
-                </com:compraProcesarRespuesta>
-            </soapenv:Body>
-        </soapenv:Envelope>';
-    }
-
-    public function reverseTest(): ?string
-    {
-        $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s', '2023-06-01 00:00:00')->format('Y-m-d');
-
-        $reverseRequest = new \stdClass();
-        $reverseRequest->codigoUnico = '11174646';
-        $reverseRequest->fechaTransaccion = $formattedDate;
-        $reverseRequest->tarjeta = '9388';
-        $reverseRequest->valorOriginal = 16755;
-        $reverseRequest->numeroAprobacion = '180107';
-        $reverseRequest->tipoAjuste = 'T';
-        $reverseRequest->IDPasarela = 28;
-
-        return json_encode($reverseRequest);
-    }
-
     private function voidResponse()
     {
         return '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://www.rbm.com.co/esb/comercio/compra/" xmlns:esb="http://www.rbm.com.co/esb/" xmlns:com1="http://www.rbm.com.co/esb/comercio/">
@@ -211,42 +162,6 @@ class RedebanRepository
         $xmlString = $this->voidResponse();
         $data = Convertor::covertToArray($xmlString);
         return $data;
-    }
-    public function reverse($data)
-    {
-        $xmlString = $this->reverseDemoResponse();
-        $data = XmltoArrayHelper::convertToArray($xmlString);
-        return $data;
-    }
-    private function reverseDemoResponse()
-    {
-        return '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://www.rbm.com.co/esb/comercio/compra/" xmlns:esb="http://www.rbm.com.co/esb/" xmlns:com1="http://www.rbm.com.co/esb/comercio/">
-        <soapenv:Body>
-           <com:compraReversarRespuesta>
-              <com:cabeceraRespuesta>
-                 <com:infoPuntoInteraccion>
-                    <com1:tipoTerminal>WEB</com1:tipoTerminal>
-                    <com1:idTerminal>ESB10001</com1:idTerminal>
-                    <com1:idAdquiriente>0010203040</com1:idAdquiriente>
-                    <com1:idTransaccionTerminal>999998</com1:idTransaccionTerminal>
-                    <com1:modoCapturaPAN>CHIP</com1:modoCapturaPAN>
-                    <com1:capacidadPIN>Permitido</com1:capacidadPIN>
-                 </com:infoPuntoInteraccion>
-              </com:cabeceraRespuesta>
-              <com:infoRespuesta>
-                 <esb:codRespuesta>00</esb:codRespuesta>
-                 <esb:descRespuesta>Aprobado</esb:descRespuesta>
-                 <esb:estado>Aprobado</esb:estado>
-              </com:infoRespuesta>
-              <com:infoCompraResp>
-                 <com:fechaTransaccion>2019-08-15T21:22:14</com:fechaTransaccion>
-                 <com:fechaPosteo>2019-08-15</com:fechaPosteo>
-                 <com:numAprobacion>025490</com:numAprobacion>
-              </com:infoCompraResp>
-              <com:idTransaccionAutorizador>000000999998</com:idTransaccionAutorizador>
-           </com:compraReversarRespuesta>
-        </soapenv:Body>
-     </soapenv:Envelope>';
     }
 
 }

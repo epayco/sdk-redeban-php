@@ -4,6 +4,7 @@ namespace Epayco\SdkRedeban\Services;
 
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
 use Exception;
+use SoapFault;
 use stdClass;
 
 class ShopService extends Service
@@ -14,12 +15,12 @@ class ShopService extends Service
         $restFinalPos = [];
         $obj = json_decode(json_encode($data));
         $request = $this->generateRequestShop($obj);
+        $redebanRepository = new RedebanRepository();
         try {
-            $redebanRepository = new RedebanRepository();
-            $redebanResponse = $redebanRepository->shopRequest($request);
+            $redebanResponse = $redebanRepository->purchase($request);
             $restFinalPos = (array)$redebanResponse;
             $status = isset($redebanResponse->infoRespuesta->codRespuesta) && $redebanResponse->infoRespuesta->codRespuesta == '00';
-        } catch(Exception $e){
+        } catch(Exception $e) {
             $redebanResponse = $e;
             $status = false;
         }
