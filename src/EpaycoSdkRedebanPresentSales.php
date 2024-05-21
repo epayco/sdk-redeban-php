@@ -10,7 +10,6 @@ use Epayco\SdkRedeban\Helpers\SDKConfig;
 use Epayco\SdkRedeban\Services\ReverseService;
 use Epayco\SdkRedeban\Services\ShopService;
 use Epayco\SdkRedeban\Services\VoidService;
-use Epayco\SdkRedeban\Validations\ReverseValidation;
 use Epayco\SdkRedeban\Validations\ShopValidation;
 use Epayco\SdkRedeban\Validations\VoidValidation;
 
@@ -26,8 +25,8 @@ class EpaycoSdkRedebanPresentSales extends HelperResponse
     public function processTransaction(
         ShopDto $request,
         $shopValidation = new ShopValidation,
-        $shopService = new ShopService)
-    {
+        $shopService = new ShopService
+    ): array {
         if ($shopValidation($request)) {
             return $this->response($shopService($shopValidation->response), $shopService->outData);
         }
@@ -43,8 +42,11 @@ class EpaycoSdkRedebanPresentSales extends HelperResponse
         return $this->response(false, $voidValidation->response);
     }
 
-    public function reverseTransaction(ShopDto $request, $reverseValidation = new ReverseValidation, $reverseService = new ReverseService)
-    {
+    public function reverseTransaction(
+        ShopDto $request,
+        $reverseValidation = new ShopValidation,
+        $reverseService = new ReverseService
+    ): array {
         if ($reverseValidation($request)) {
             return $this->response($reverseService($reverseValidation->response), $reverseService->outData);
         }
