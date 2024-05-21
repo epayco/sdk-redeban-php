@@ -1,7 +1,7 @@
 <?php
-namespace Epayco\SdkRedeban\Helpers;
+namespace Epayco\SdkRedeban\DTOs;
 
-class DataConfigSdkRedeban
+class DataConfigSdkDto
 {
     public string $username;
     public string $password;
