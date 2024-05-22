@@ -29,7 +29,7 @@ class ReverseService extends Service
             $redebanResponse = $e;
             $status = false;
         }
-        $restFinalPos['log_request']    = $inputData;
+        $restFinalPos['log_request']    = $reverseRequest;
         $restFinalPos['log_response']   = $redebanResponse ?? null;
         $this->outData = $restFinalPos;
 
