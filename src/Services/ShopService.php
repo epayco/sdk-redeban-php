@@ -67,7 +67,7 @@ class ShopService extends Service
         $compraProcesarSolicitud->infoCompra->montoDetallado->tipoMontoDetallado = $obj->detailedAmountType;
         $compraProcesarSolicitud->infoCompra->montoDetallado->monto = $obj->detailedAmount;
 
-        $compraProcesarSolicitud->datosAdicionales = $obj->additionalDataType;
+        $compraProcesarSolicitud->datosAdicionales = $obj->additionalData;
 
         return $compraProcesarSolicitud;
     }

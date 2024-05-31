@@ -25,7 +25,7 @@ class ShopDto
     public string $detailedAmountType;
     public float $detailedAmount;
     public int $installmentCount;
-    public stdClass $additionalDataType;
+    public stdClass $additionalData;
 
     public function __construct()
     {
@@ -48,7 +48,7 @@ class ShopDto
         $this->detailedAmount = 0;
         $this->installmentCount = 0;
         $this->reference = "";
-        $this->additionalDataType = new stdClass();
+        $this->additionalData = new stdClass();
     }
 
 }
