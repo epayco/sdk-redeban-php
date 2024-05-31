@@ -1,6 +1,8 @@
 <?php
 namespace Epayco\SdkRedeban\DTOs;
 
+use stdClass;
+
 class ShopDto
 {
     public string $reference;
@@ -23,7 +25,7 @@ class ShopDto
     public string $detailedAmountType;
     public float $detailedAmount;
     public int $installmentCount;
-    public string $additionalDataType;
+    public stdClass $additionalData;
 
     public function __construct()
     {
@@ -46,7 +48,7 @@ class ShopDto
         $this->detailedAmount = 0;
         $this->installmentCount = 0;
         $this->reference = "";
-        $this->additionalDataType = "";
+        $this->additionalData = new stdClass();
     }
 
 }

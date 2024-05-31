@@ -39,6 +39,6 @@ $shopRequest->detailedAmountType = "aaaaaaaaaa";
 $shopRequest->detailedAmount = 0.0;
 $shopRequest->installmentCount = 1;
 $shopRequest->reference = 2;
-$shopRequest->additionalDataType = "aaaaaaaaaa";
+$shopRequest->additionalData = "aaaaaaaaaa";
 
 print_r($sdk->processTransaction($shopRequest));

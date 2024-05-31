@@ -67,18 +67,7 @@ class ShopService extends Service
         $compraProcesarSolicitud->infoCompra->montoDetallado->tipoMontoDetallado = $obj->detailedAmountType;
         $compraProcesarSolicitud->infoCompra->montoDetallado->monto = $obj->detailedAmount;
 
-        $compraProcesarSolicitud->datosAdicionales = new stdClass();
-//        $datosAdicionales = new stdClass();
-        $compraProcesarSolicitud->datosAdicionales->tipo = 'C4';
-        $compraProcesarSolicitud->datosAdicionales->valor = 'XXXXXXXXXXXX';
-//        $additionaData[] = $datosAdicionales;
-//        $compraProcesarSolicitud->datosAdicionales[] = $datosAdicionales;
-
-//        $datosAdicionales = new stdClass();
-//        $datosAdicionales->tipo = 'CH';
-//        $datosAdicionales->valor = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
-//        $additionaData[] = $datosAdicionales;
-//        $compraProcesarSolicitud->datosAdicionales = (object)$additionaData;
+        $compraProcesarSolicitud->datosAdicionales = $obj->additionalData;
 
         return $compraProcesarSolicitud;
     }
