@@ -1,7 +1,6 @@
 <?php
 namespace Epayco\SdkRedeban\Services;
 
-use Epayco\SdkRedeban\DTOs\ShopDto;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
 use Exception;
 
@@ -32,7 +31,6 @@ class ReverseService extends Service
         $restFinalPos['log_request']    = $reverseRequest;
         $restFinalPos['log_response']   = $redebanResponse ?? null;
         $this->outData = $restFinalPos;
-
 
         return $status;
         
