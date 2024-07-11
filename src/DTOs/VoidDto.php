@@ -20,7 +20,7 @@ class VoidDto
     public float $amountBase;
     public float $VATRefundBase;
     public string $reference;
-    public int $installmentCount;
+    public int $instalmentCount;
     public string $authorizerTransactionId;
 
     public function __construct()
@@ -41,7 +41,7 @@ class VoidDto
         $this->amountBase = 0;
         $this->VATRefundBase = 0;
         $this->reference = "";
-        $this->installmentCount = 0;
+        $this->instalmentCount = 0;
         $this->authorizerTransactionId = "";
     }
 }

@@ -66,7 +66,7 @@ class VoidService extends Service
                     "monto" => $data->VATRefundBase,
                 ],
                 "referencia" => $data->reference,
-                "cantidadCuotas" => $data->installmentCount,
+                "cantidadCuotas" => $data->instalmentCount,
             ],
             "infoRefCancelacion" => [
                 "numAprobacion" => 'approvalNumber',

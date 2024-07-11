@@ -36,11 +36,11 @@
       <xsd:element name="cabeceraSolicitud" type="cmp:TipoCabeceraSolicitud"/>
       <xsd:element minOccurs="0" name="idPersona" type="rbm:TipoIdPersona"/>
       <xsd:element name="infoMedioPago" type="cmp:TipoInfoMedioPago"/>
-	  <xsd:element name="datosAdicionales" type="cmp:TipodatosAdicionales"/>																	 
       <xsd:element name="infoTokenizacion" type="rbm:TipoInfoTokenizacion" maxOccurs="1" minOccurs="0"/>
       <xsd:element name="infoCompra" type="cmp:TipoInfoCompra"/>
       <xsd:element name="infoPersona" type="rbm:TipoInfoPersona" maxOccurs="unbounded" minOccurs="0"/>
-      <xsd:element name="infoAdicional" type="cmp:TipoInfoSecure" maxOccurs="1" minOccurs="0"/>						  
+      <xsd:element name="infoAdicional" type="cmp:TipoInfoSecure" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="datosAdicionales" type="cmp:TipodatosAdicionales" maxOccurs="3" minOccurs="2"/>
     </xsd:sequence>
   </xsd:complexType> 					  
   <xsd:complexType name="TipodatosAdicionales">

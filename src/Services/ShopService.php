@@ -9,7 +9,7 @@ use stdClass;
 class ShopService extends Service
 {
     public mixed $outData;
-    public function __invoke($data)
+    public function __invoke($data): bool
     {
         $restFinalPos = [];
         $obj = json_decode(json_encode($data));
@@ -17,7 +17,8 @@ class ShopService extends Service
         $redebanRepository = new RedebanRepository();
         try {
             $redebanResponse = $redebanRepository->purchase($request);
-            $restFinalPos = (array)$redebanResponse;
+            $restFinalPos = (array)$redebanResponse ?? [];
+
             $status = isset($redebanResponse->infoRespuesta->codRespuesta) && $redebanResponse->infoRespuesta->codRespuesta == '00';
         } catch(Exception $e) {
             $redebanResponse = $e;
@@ -26,6 +27,7 @@ class ShopService extends Service
         $restFinalPos['log_request']    = $request;
         $restFinalPos['log_response']   = $redebanResponse ?? null;
         $this->outData = $restFinalPos;
+
         return $status;
     }
 
@@ -37,8 +39,6 @@ class ShopService extends Service
         $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->tipoTerminal = $obj->terminalType;
         $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->idTerminal = $obj->terminalId;
         $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->idAdquiriente = $obj->acquirerId;
-        //TODO: idTransaccionTerminal se suma en cada transaction
-//        $trxIdTerminal = $configSitio->id_tran_terminal ?? 1;
         $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->idTransaccionTerminal = $obj->terminalTransactionId;
         $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->modoCapturaPAN = $obj->panCaptureMode;
         $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->capacidadPIN = $obj->pinCapability;
@@ -57,28 +57,31 @@ class ShopService extends Service
         $compraProcesarSolicitud->infoCompra = new stdClass();
         $compraProcesarSolicitud->infoCompra->montoTotal = $obj->totalAmount;
         $compraProcesarSolicitud->infoCompra->referencia = $obj->reference;
-        $compraProcesarSolicitud->infoCompra->cantidadCuotas = $obj->installmentCount;
+        $compraProcesarSolicitud->infoCompra->cantidadCuotas = $obj->instalmentCount;
 
-        $compraProcesarSolicitud->infoCompra->infoImpuestos = new stdClass();
-        $compraProcesarSolicitud->infoCompra->infoImpuestos->tipoImpuesto = $obj->taxType;
-        $compraProcesarSolicitud->infoCompra->infoImpuestos->monto = $obj->amountTax;
+        $compraProcesarSolicitud->infoCompra->infoImpuestos = array();
+        foreach ($obj->infoTax as $value) {
+            $values = new stdClass();
+            $values->tipoImpuesto = $value->taxType;
+            $values->monto = $value->amountTax;
+            $compraProcesarSolicitud->infoCompra->infoImpuestos[] = $values;
+        }
 
-        $compraProcesarSolicitud->infoCompra->montoDetallado = new stdClass();
-        $compraProcesarSolicitud->infoCompra->montoDetallado->tipoMontoDetallado = $obj->detailedAmountType;
-        $compraProcesarSolicitud->infoCompra->montoDetallado->monto = $obj->detailedAmount;
+        $compraProcesarSolicitud->infoCompra->montoDetallado = array();
+        foreach ($obj->detailedAmount as $value) {
+            $values = new stdClass();
+            $values->tipoMontoDetallado = $value->detailedAmountType;
+            $values->monto = $value->detailedAmount;
+            $compraProcesarSolicitud->infoCompra->montoDetallado[] = $values;
+        }
 
-        $compraProcesarSolicitud->datosAdicionales = new stdClass();
-//        $datosAdicionales = new stdClass();
-        $compraProcesarSolicitud->datosAdicionales->tipo = 'C4';
-        $compraProcesarSolicitud->datosAdicionales->valor = 'XXXXXXXXXXXX';
-//        $additionaData[] = $datosAdicionales;
-//        $compraProcesarSolicitud->datosAdicionales[] = $datosAdicionales;
-
-//        $datosAdicionales = new stdClass();
-//        $datosAdicionales->tipo = 'CH';
-//        $datosAdicionales->valor = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
-//        $additionaData[] = $datosAdicionales;
-//        $compraProcesarSolicitud->datosAdicionales = (object)$additionaData;
+        $compraProcesarSolicitud->datosAdicionales = array();
+        foreach ($obj->additionalData as $value) {
+            $values = new stdClass();
+            $values->tipo = $value->type;
+            $values->valor = $value->value;
+            $compraProcesarSolicitud->datosAdicionales[] = $values;
+        }
 
         return $compraProcesarSolicitud;
     }

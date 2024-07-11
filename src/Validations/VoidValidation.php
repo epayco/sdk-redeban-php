@@ -27,7 +27,7 @@ class VoidValidation extends Validation
             'amountBase' => v::numericVal()->finite(),
             'VATRefundBase' => v::numericVal()->finite(),
             'reference' => v::notEmpty()->length(2, 100),
-            'installmentCount' => v::numericVal()->finite(),
+            'instalmentCount' => v::numericVal()->finite(),
             'authorizerTransactionId' => v::notEmpty()->length(2, 100),
         ];
 
@@ -47,7 +47,7 @@ class VoidValidation extends Validation
             "amountBase" => 'El campo amountBase es requerido y debe ser un número positivo.',
             "VATRefundBase" => 'El campo VATRefundBase es requerido y debe ser un número positivo.',
             "reference" => 'El campo reference es requerido y debe ser un string.',
-            "installmentCount" => 'El campo installmentCount es requerido y debe ser un número entero positivo.',
+            "instalmentCount" => 'El campo instalmentCount es requerido y debe ser un número entero positivo.',
             "approvalNumber" => 'El campo approvalNumber es requerido',
             "authorizerTransactionId" => 'El campo authorizerTransactionId es requerido',
         ];

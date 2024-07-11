@@ -2,7 +2,6 @@
 
 namespace Epayco\SdkRedeban\Validations;
 
-use Epayco\SdkRedeban\Validations\Validation;
 use Respect\Validation\Validator as v;
 
 class ShopValidation extends Validation
@@ -24,12 +23,11 @@ class ShopValidation extends Validation
             'tokenStatus' => v::notEmpty()->length(2, 100),
             'discreetData' => v::notEmpty()->length(2, 100),
             'totalAmount' => v::notEmpty()->numericVal()->positive(),
-            'taxType' => v::notEmpty()->length(2, 30),
-            'amountTax' => v::numericVal()->finite(),
-            'detailedAmountType' => v::notEmpty()->length(2, 100),
-            'detailedAmount' => v::numericVal()->finite(),
             'reference' => v::notEmpty()->length(1, 20),
-            'installmentCount' => v::numericVal()->finite(),
+            'instalmentCount' => v::numericVal()->finite(),
+            'additionalData' => v::arrayType(),
+            'infoTax' => v::arrayType(),
+            'detailedAmount' => v::arrayType(),
         ];
 
         $errorMessages = [
@@ -46,12 +44,11 @@ class ShopValidation extends Validation
             'tokenStatus' => 'El campo tokenStatus es requerido y debe ser un string.',
             'discreetData' => 'El campo discreetData es requerido y debe ser un string.',
             'totalAmount' => 'El campo totalAmount es requerido y debe ser un número positivo.',
-            'taxType' => 'El campo taxType es requerido y debe ser un string.',
-            'amountTax' => 'El campo amountTax es requerido y debe ser un número finito.',
-            'detailedAmountType' => 'El campo detailedAmountType es requerido y debe ser un string.',
-            'detailedAmount' => 'El campo detailedAmount es requerido y debe ser un número finito.',
             'reference' => 'El campo reference es requerido y debe ser un string.',
-            'installmentCount' => 'El campo installmentCount es requerido y debe ser un número entero finito.'
+            'instalmentCount' => 'El campo instalmentCount es requerido y debe ser un número entero finito.',
+            'additionalData' => 'El campo adicionalData debe ser un array de objetos.',
+            'infoTax' => 'El campo infoTax debe ser un array de objetos.',
+            'detailedAmount' => 'El campo detailedAmount debe ser un array de objetos.',
         ];
 
         return $this->validate($requestValidator, $errorMessages, $request);

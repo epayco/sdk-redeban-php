@@ -26,7 +26,7 @@ $voidRequest->taxAmount = 0;
 $voidRequest->amountBase = 0;
 $voidRequest->VATRefundBase = 0;
 $voidRequest->reference = "xxxxxxxxxxxxxx";
-$voidRequest->installmentCount = 0;
+$voidRequest->instalmentCount = 0;
 $voidRequest->authorizerTransactionId = "xxxxxxxxxxxxxx";
 
 print_r($sdk->cancelTransaction($voidRequest));

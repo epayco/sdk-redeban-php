@@ -18,12 +18,10 @@ class ShopDto
     public string $tokenStatus;
     public string $discreetData;
     public float $totalAmount;
-    public string $taxType;
-    public float $amountTax;
-    public string $detailedAmountType;
-    public float $detailedAmount;
-    public int $installmentCount;
-    public string $additionalDataType;
+    public int $instalmentCount;
+    public mixed $additionalData;
+    public mixed $infoTax;
+    public mixed $detailedAmount;
 
     public function __construct()
     {
@@ -40,13 +38,11 @@ class ShopDto
         $this->tokenStatus = "";
         $this->discreetData = "";
         $this->totalAmount = 0;
-        $this->taxType = "";
-        $this->amountTax = 0;
-        $this->detailedAmountType = "";
-        $this->detailedAmount = 0;
-        $this->installmentCount = 0;
+        $this->instalmentCount = 0;
         $this->reference = "";
-        $this->additionalDataType = "";
+        $this->additionalData = [];
+        $this->infoTax = [];
+        $this->detailedAmount = [];
     }
 
 }
