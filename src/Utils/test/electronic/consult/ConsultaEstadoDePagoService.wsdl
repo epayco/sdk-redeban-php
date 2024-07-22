@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ConsultaEstadoDePago" targetNamespace="http://www.rbm.com.co/esb/globalpay/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.rbm.com.co/esb/globalpay/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.rbm.com.co/esb/globalpay/" xmlns:mrm="http://www.rbm.com.co/esb/globalpay/">
+      <xsd:include schemaLocation="globalpay.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ConsultaEstadoDePago_in">
+    <wsdl:part element="tns:ConsultarEstadoDePagoSolicitud" name="ConsultarEstadoDePagoSolicitud"/>
+  </wsdl:message>
+  <wsdl:message name="ConsultaEstadoDePago_out">
+    <wsdl:part element="tns:ConsultarEstadoDePagoRespuesta" name="ConsultarEstadoDePagoRespuesta"/>
+  </wsdl:message>
+  <wsdl:message name="ConsultaEstadoDePago_fault1">
+    <wsdl:part element="tns:ConsultarEstadoDePagoFault" name="ConsultarEstadoDePagoFault"/>
+  </wsdl:message>
+  <wsdl:portType name="ConsultaEstadoDePago_PortType">
+    <wsdl:operation name="ConsultaEstadoDePago">
+      <wsdl:input message="tns:ConsultaEstadoDePago_in" name="ConsultaEstadoDePago_Input"/>
+      <wsdl:output message="tns:ConsultaEstadoDePago_out" name="ConsultaEstadoDePago_Output"/>
+      <wsdl:fault message="tns:ConsultaEstadoDePago_fault1" name="ConsultaEstadoDePago_Fault"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ConsultaEstadoDePago_Binding" type="tns:ConsultaEstadoDePago_PortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ConsultaEstadoDePago">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="ConsultaEstadoDePago_Input">
+        <soap:body parts="ConsultarEstadoDePagoSolicitud" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ConsultaEstadoDePago_Output">
+        <soap:body parts="ConsultarEstadoDePagoRespuesta" use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ConsultaEstadoDePago_Fault">
+        <soap:fault name="ConsultaEstadoDePago_Fault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ConsultaEstadoDePago_Service">
+    <wsdl:port binding="tns:ConsultaEstadoDePago_Binding" name="ConsultaEstadoDePago_Port">
+      <soap:address location="https://www.txstestrbm.com:9990/Consulta/ConsultaEstadoTransaccion"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

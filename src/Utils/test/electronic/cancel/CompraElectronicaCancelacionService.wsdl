@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions name="CompraElectronicaCancelacion" targetNamespace="http://www.rbm.com.co/esb/comercio/compra/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.rbm.com.co/esb/comercio/compra/" xmlns:mrm="http://www.rbm.com.co/esb/comercio/compra/">
+      <xsd:include schemaLocation="compraElectronicaCancelacion.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="compraCancelacionProcesar_in">
+    <wsdl:part element="tns:compraCancelacionProcesarSolicitud" name="compraCancelacionProcesarSolicitud"/>
+  </wsdl:message>
+  <wsdl:message name="compraCancelacionProcesar_out">
+    <wsdl:part element="tns:compraCancelacionProcesarRespuesta" name="compraCancelacionProcesarRespuesta"/>
+  </wsdl:message>
+  <wsdl:message name="compraCancelacionReversar_in">
+    <wsdl:part element="tns:compraCancelacionReversarSolicitud" name="compraCancelacionReversarSolicitud"/>
+  </wsdl:message>
+  <wsdl:message name="compraCancelacionReversar_out">
+    <wsdl:part element="tns:compraCancelacionReversarRespuesta" name="compraCancelacionReversarRespuesta"/>
+  </wsdl:message>
+  <wsdl:portType name="CompraElectronica_MsgSetPortType">
+    <wsdl:operation name="compraCancelacionProcesar">
+      <wsdl:input message="tns:compraCancelacionProcesar_in" name="compraCancelacionProcesar_Input"/>
+      <wsdl:output message="tns:compraCancelacionProcesar_out" name="compraCancelacionProcesar_Output"/>
+    </wsdl:operation>
+    <wsdl:operation name="compraCancelacionReversar">
+      <wsdl:input message="tns:compraCancelacionReversar_in" name="compraCancelacionReversar_Input"/>
+      <wsdl:output message="tns:compraCancelacionReversar_out" name="compraCancelacionReversar_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CompraElectronicaCancelacion_HTTP_Binding" type="tns:CompraElectronica_MsgSetPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="compraCancelacionProcesar">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="compraCancelacionProcesar_Input">
+        <soap:body parts="compraCancelacionProcesarSolicitud" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="compraCancelacionProcesar_Output">
+        <soap:body parts="compraCancelacionProcesarRespuesta" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="compraCancelacionReversar">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="compraCancelacionReversar_Input">
+        <soap:body parts="compraCancelacionReversarSolicitud" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="compraCancelacionReversar_Output">
+        <soap:body parts="compraCancelacionReversarRespuesta" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CompraElectronicaCancelacion_HTTP_Service">
+    <wsdl:port binding="tns:CompraElectronicaCancelacion_HTTP_Binding" name="CompraElectronicaCancelacion_HTTP_Port">
+      <soap:address location="https://www.txstestrbm.com:9990/CompraElectronica/Compra"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

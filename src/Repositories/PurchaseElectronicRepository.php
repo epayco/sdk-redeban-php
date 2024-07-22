@@ -3,19 +3,19 @@
 namespace Epayco\SdkRedeban\Repositories;
 
 use Epayco\SdkRedeban\Adapters\WSSESoapAdapter;
-use Epayco\SdkRedeban\Helpers\SDKConfig;
+use Epayco\SdkRedeban\Helpers\PurchaseConfig;
 use Gaarf\XmlToPhp\Convertor;
 
 use SoapFault;
 
-class RedebanRepository
+class PurchaseElectronicRepository
 {
-    private SDKConfig $sdkConfig;
+    private PurchaseConfig $sdkConfig;
     private string $sdkRealPath;
 
     public function __construct()
     {
-        $this->sdkConfig = SDKConfig::getInstance();
+        $this->sdkConfig = PurchaseConfig::getInstance();
         $this->sdkRealPath = realpath(__DIR__ . '/..');
     }
 

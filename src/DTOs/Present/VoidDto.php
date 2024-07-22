@@ -1,5 +1,5 @@
 <?php
-namespace Epayco\SdkRedeban\DTOs;
+namespace Epayco\SdkRedeban\DTOs\Present;
 
 class VoidDto
 {

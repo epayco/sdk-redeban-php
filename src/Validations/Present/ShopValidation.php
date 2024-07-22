@@ -1,7 +1,8 @@
 <?php
 
-namespace Epayco\SdkRedeban\Validations;
+namespace Epayco\SdkRedeban\Validations\Present;
 
+use Epayco\SdkRedeban\Validations\Validation;
 use Respect\Validation\Validator as v;
 
 class ShopValidation extends Validation

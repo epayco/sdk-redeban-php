@@ -1,12 +1,13 @@
 <?php
 
-namespace Epayco\SdkRedeban\Services;
+namespace Epayco\SdkRedeban\Services\Electronic;
 
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
+use Epayco\SdkRedeban\Services\Service;
 use Exception;
 use stdClass;
 
-class ShopService extends Service
+class PurchaseService extends Service
 {
     public mixed $outData;
     public function __invoke($data): bool

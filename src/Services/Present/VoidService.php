@@ -1,9 +1,9 @@
 <?php
 
-namespace Epayco\SdkRedeban\Services;
+namespace Epayco\SdkRedeban\Services\Present;
 
-use Epayco\SdkRedeban\Services\Service;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
+use Epayco\SdkRedeban\Services\Service;
 
 class VoidService extends Service
 {
