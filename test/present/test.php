@@ -22,7 +22,7 @@ $shopRequest = new ShopDto;
 $shopRequest->terminalType = "MPOS";
 $shopRequest->terminalId = "EPAYTERM";
 $shopRequest->acquirerId = "10203047";
-$shopRequest->terminalTransactionId = 4;
+$shopRequest->terminalTransactionId = 30001;
 $shopRequest->panCaptureMode = "CHIP";
 $shopRequest->pinCapability = "Permitido";
 $shopRequest->brand = "MasterCard";
@@ -33,7 +33,7 @@ $shopRequest->tokenStatus = "007510001f0300000001";
 $shopRequest->discreetData = "4B003149434360d8c8000000000000002200011f03000007a0000000031010000000000000000000";
 $shopRequest->totalAmount = 10000;
 $shopRequest->instalmentCount = 1;
-$shopRequest->reference = 11110;
+$shopRequest->reference = 1111001;
 
 $additional1 = new stdClass();
 $additional1->type = "C4";

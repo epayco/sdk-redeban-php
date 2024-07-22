@@ -50,7 +50,7 @@
   </wsdl:binding>
   <wsdl:service name="CompraElectronicaCancelacion_HTTP_Service">
     <wsdl:port binding="tns:CompraElectronicaCancelacion_HTTP_Binding" name="CompraElectronicaCancelacion_HTTP_Port">
-      <soap:address location="https://www.txstestrbm.com/x"/>
+      <soap:address location="https://www.txstestrbm.com:4443/ESBCompraPresencial/CompraElectronica"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
