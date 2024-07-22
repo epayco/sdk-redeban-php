@@ -2,9 +2,8 @@
 
 require '../../vendor/autoload.php';
 
+use Epayco\SdkRedeban\DTOs\Present\VoidDto;
 use Epayco\SdkRedeban\EpaycoSdkRedebanPresentSales;
-
-use Epayco\SdkRedeban\DTOs\VoidDto;
 
 $sdk = new EpaycoSdkRedebanPresentSales();
 

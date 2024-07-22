@@ -2,9 +2,8 @@
 
 require_once '../../vendor/autoload.php';
 
+use Epayco\SdkRedeban\DTOs\Present\ShopDto;
 use Epayco\SdkRedeban\EpaycoSdkRedebanPresentSales;
-
-use Epayco\SdkRedeban\DTOs\ShopDto;
 
 $localCert = file_get_contents("../certs/local_cert.pem");
 $localPrivateKey = file_get_contents("../certs/local_key.pem");
