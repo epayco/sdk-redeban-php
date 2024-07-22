@@ -4,12 +4,12 @@ namespace Epayco\SdkRedeban\Helpers;
 
 class HelperResponse
 {
-    public function response(bool $type, $response = null)
+    public function response(bool $type, $response = null): array
     {
         return $type ? $this->responseOk($response) : $this->responseError($response);
     }
 
-    public function responseOk($data = null, $message = "Success")
+    public function responseOk($data = null, $message = "Success"): array
     {
         return [
             'success' => true,
@@ -19,7 +19,7 @@ class HelperResponse
         ];
     }
 
-    public function responseError($data = null, $message = "Error")
+    public function responseError($data = null, $message = "Error"): array
     {
         return [
             'success' => false,

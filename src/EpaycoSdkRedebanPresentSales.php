@@ -2,16 +2,16 @@
 
 namespace Epayco\SdkRedeban;
 
-use Epayco\SdkRedeban\DTOs\DataConfigSdkDto;
-use Epayco\SdkRedeban\DTOs\ShopDto;
-use Epayco\SdkRedeban\DTOs\VoidDto;
+use Epayco\SdkRedeban\DTOs\Present\DataConfigSdkDto;
+use Epayco\SdkRedeban\DTOs\Present\ShopDto;
+use Epayco\SdkRedeban\DTOs\Present\VoidDto;
 use Epayco\SdkRedeban\Helpers\HelperResponse;
 use Epayco\SdkRedeban\Helpers\SDKConfig;
-use Epayco\SdkRedeban\Services\ReverseService;
-use Epayco\SdkRedeban\Services\ShopService;
-use Epayco\SdkRedeban\Services\VoidService;
-use Epayco\SdkRedeban\Validations\ShopValidation;
-use Epayco\SdkRedeban\Validations\VoidValidation;
+use Epayco\SdkRedeban\Services\Present\ReverseService;
+use Epayco\SdkRedeban\Services\Present\ShopService;
+use Epayco\SdkRedeban\Services\Present\VoidService;
+use Epayco\SdkRedeban\Validations\Present\ShopValidation;
+use Epayco\SdkRedeban\Validations\Present\VoidValidation;
 
 class EpaycoSdkRedebanPresentSales extends HelperResponse
 {

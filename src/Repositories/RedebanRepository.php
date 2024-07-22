@@ -50,7 +50,7 @@ class RedebanRepository
     {
         $environment = $this->sdkConfig->getConfig('environment') ?? 'test';
 
-        $urlWebService = realpath("$this->sdkRealPath/Utils/$environment/$wsdlPath");
+        $urlWebService = realpath("$this->sdkRealPath/Utils/$environment/present/$wsdlPath");
 
         $localPrivateKey = $this->sdkConfig->getConfig('localPrivateKey');
         $localCert = $this->sdkConfig->getConfig('localCert');
@@ -88,9 +88,9 @@ class RedebanRepository
     public function generateCertFiles(): array
     {
         $certs = [];
-        $localPrivateKeyPath = $this->sdkRealPath . "/Utils/cert/local_key.pem";
-        $localCertPath = $this->sdkRealPath . "/Utils/cert/local_cert.pem";
-        $serviceCertPath = $this->sdkRealPath . "/Utils/cert/rbm_cert.pem";
+        $localPrivateKeyPath = $this->sdkRealPath . "/Utils/cert/present/local_key.pem";
+        $localCertPath = $this->sdkRealPath . "/Utils/cert/present/local_cert.pem";
+        $serviceCertPath = $this->sdkRealPath . "/Utils/cert/present/rbm_cert.pem";
         if (!file_exists($localPrivateKeyPath)) {
             file_put_contents(
                 $localPrivateKeyPath,

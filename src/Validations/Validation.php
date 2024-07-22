@@ -1,11 +1,12 @@
 <?php
 namespace Epayco\SdkRedeban\Validations;
+
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Validator as v;
 class Validation
 {
-    public $response;
-    public function validate($validationRules, $errorMessages, $request)
+    public mixed $response;
+    public function validate($validationRules, $errorMessages, $request): bool
     {
         $this->response = $request;
         foreach ($validationRules as $field => $validator) {
