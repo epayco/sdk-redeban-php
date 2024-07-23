@@ -1,47 +1,52 @@
 <?php
 namespace Epayco\SdkRedeban\DTOs\Present;
 
-class VoidDto
+class CancelDto
 {
-
+    public string $reference;
+    public float $amount;
+    public string $terminalType;
     public string $terminalId;
     public string $acquirerId;
     public string $terminalTransactionId;
     public string $panCaptureMode;
     public string $pinCapability;
-    public string $franchise;
-    public string $track;
+    public string $brand;
+    public string $trackData;
     public string $accountType;
     public string $tokenData;
     public string $tokenStatus;
-    public string $discreteData;
+    public string $discreetData;
     public float $totalAmount;
-    public float $taxAmount;
-    public float $amountBase;
-    public float $VATRefundBase;
-    public string $reference;
     public int $instalmentCount;
-    public string $authorizerTransactionId;
+    public string $approvalNumber;
+    public string $transactionIdAuthorizer;
+    public mixed $additionalData;
+    public mixed $infoTax;
+    public mixed $detailedAmount;
 
     public function __construct()
     {
+        $this->terminalType = "";
         $this->terminalId = "";
         $this->acquirerId = "";
         $this->terminalTransactionId = "";
         $this->panCaptureMode = "";
         $this->pinCapability = "";
-        $this->franchise = "";
-        $this->track = "";
-        $this->accountType = "";
+        $this->brand = "";
+        $this->trackData = "";
         $this->tokenData = "";
+        $this->accountType = "";
         $this->tokenStatus = "";
-        $this->discreteData = "";
+        $this->discreetData = "";
         $this->totalAmount = 0;
-        $this->taxAmount = 0;
-        $this->amountBase = 0;
-        $this->VATRefundBase = 0;
-        $this->reference = "";
         $this->instalmentCount = 0;
-        $this->authorizerTransactionId = "";
+        $this->reference = "";
+        $this->approvalNumber = "";
+        $this->transactionIdAuthorizer = "";
+        $this->additionalData = [];
+        $this->infoTax = [];
+        $this->detailedAmount = [];
     }
+
 }
