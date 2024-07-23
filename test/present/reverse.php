@@ -5,9 +5,9 @@ require_once '../../vendor/autoload.php';
 use Epayco\SdkRedeban\DTOs\Present\ShopDto;
 use Epayco\SdkRedeban\EpaycoSdkRedebanPresentSales;
 
-$localCert = file_get_contents("../certs/local_cert.pem");
-$localPrivateKey = file_get_contents("../certs/local_key.pem");
-$redebanKey = file_get_contents("../certs/rbm_cert.pem");
+$localCert = file_get_contents("crt/local_cert.pem");
+$localPrivateKey = file_get_contents("crt/local_key.pem");
+$redebanKey = file_get_contents("crt/rbm_cert.pem");
 
 $sdk = new EpaycoSdkRedebanPresentSales();
 $sdk->setUsername("TestAliEpayco")

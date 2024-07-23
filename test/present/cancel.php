@@ -5,9 +5,9 @@ require_once '../../vendor/autoload.php';
 use Epayco\SdkRedeban\DTOs\Present\CancelDto;
 use Epayco\SdkRedeban\EpaycoSdkRedebanPresentSales;
 
-$localCert = file_get_contents("../certs/local_cert.pem");
-$localPrivateKey = file_get_contents("../certs/local_key.pem");
-$redebanKey = file_get_contents("../certs/rbm_cert.pem");
+$localCert = file_get_contents("crt/local_cert.pem");
+$localPrivateKey = file_get_contents("crt/local_key.pem");
+$redebanKey = file_get_contents("crt/rbm_cert.pem");
 
 $sdk = new EpaycoSdkRedebanPresentSales();
 $sdk->setUsername("TestAliEpayco")
@@ -22,7 +22,7 @@ $cancelRequest = new CancelDto();
 $cancelRequest->terminalType = "MPOS";
 $cancelRequest->terminalId = "EPAYTERM";
 $cancelRequest->acquirerId = "10203047";
-$cancelRequest->terminalTransactionId = 30001;
+$cancelRequest->terminalTransactionId = 30003;
 $cancelRequest->panCaptureMode = "CHIP";
 $cancelRequest->pinCapability = "Permitido";
 $cancelRequest->brand = "MasterCard";
@@ -33,9 +33,9 @@ $cancelRequest->tokenStatus = "007510001f0300000001";
 $cancelRequest->discreetData = "4B003149434360d8c8000000000000002200011f03000007a0000000031010000000000000000000";
 $cancelRequest->totalAmount = 10000;
 $cancelRequest->instalmentCount = 1;
-$cancelRequest->reference = 1111001;
-$cancelRequest->approvalNumber = '053260';
-$cancelRequest->transactionIdAuthorizer = '30001';
+$cancelRequest->reference = 1111003;
+$cancelRequest->approvalNumber = '053250'; // Cambiar esto
+$cancelRequest->transactionIdAuthorizer = '30003'; // Cambiar esto
 
 $additional1 = new stdClass();
 $additional1->type = "C4";
