@@ -2,7 +2,7 @@
 
 namespace Epayco\SdkRedeban\Services\Electronic;
 
-use Epayco\SdkRedeban\Repositories\RedebanRepository;
+use Epayco\SdkRedeban\Repositories\PurchaseElectronicRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
 use stdClass;
@@ -15,7 +15,7 @@ class PurchaseService extends Service
         $restFinalPos = [];
         $obj = json_decode(json_encode($data));
         $request = $this->generateRequestShop($obj);
-        $redebanRepository = new RedebanRepository();
+        $redebanRepository = new PurchaseElectronicRepository();
         try {
             $redebanResponse = $redebanRepository->purchase($request);
             $restFinalPos = (array)$redebanResponse ?? [];
@@ -44,44 +44,50 @@ class PurchaseService extends Service
         $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->modoCapturaPAN = $obj->panCaptureMode;
         $compraProcesarSolicitud->cabeceraSolicitud->infoPuntoInteraccion->capacidadPIN = $obj->pinCapability;
 
-        $compraProcesarSolicitud->infoMedioPago = new stdClass();
-        $compraProcesarSolicitud->infoMedioPago->idTrack = new stdClass();
-        $compraProcesarSolicitud->infoMedioPago->idTrack->Franquicia = $obj->brand;
-        $compraProcesarSolicitud->infoMedioPago->idTrack->track = $obj->trackData;
-        $compraProcesarSolicitud->infoMedioPago->idTrack->tipoCuenta = $obj->accountType;
+        $compraProcesarSolicitud->idPersona = new stdClass();
+        $compraProcesarSolicitud->idPersona->tipoDocumento = $obj->personDocumentType;
+        $compraProcesarSolicitud->idPersona->numDocumento = $obj->personDocumentNumber;
 
-        $compraProcesarSolicitud->infoMedioPago->infoEMV = new stdClass();
-        $compraProcesarSolicitud->infoMedioPago->infoEMV->datosToken = $obj->tokenData;
-        $compraProcesarSolicitud->infoMedioPago->infoEMV->datosDiscretos = $obj->discreetData;
-        $compraProcesarSolicitud->infoMedioPago->infoEMV->estadoToken = $obj->tokenStatus;
+        $compraProcesarSolicitud->infoMedioPago = new stdClass();
+        $compraProcesarSolicitud->infoMedioPago->{$obj->cardType} = new stdClass();
+        $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->franquicia = $obj->franchise;
+        $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->numTarjeta = $obj->cardNumber;
+        $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->fechaExpiracion = $obj->expirationDate;
+        $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->codVerificacion = $obj->securityCode;
 
         $compraProcesarSolicitud->infoCompra = new stdClass();
         $compraProcesarSolicitud->infoCompra->montoTotal = $obj->totalAmount;
         $compraProcesarSolicitud->infoCompra->referencia = $obj->reference;
-        $compraProcesarSolicitud->infoCompra->cantidadCuotas = $obj->instalmentCount;
+        $compraProcesarSolicitud->infoCompra->cantidadCuotas = $obj->instalmentsQuantity;
 
-        $compraProcesarSolicitud->infoCompra->infoImpuestos = array();
-        foreach ($obj->infoTax as $value) {
-            $values = new stdClass();
-            $values->tipoImpuesto = $value->taxType;
-            $values->monto = $value->amountTax;
-            $compraProcesarSolicitud->infoCompra->infoImpuestos[] = $values;
+        if ($obj->ivaTax > 0) {
+            $compraProcesarSolicitud->infoCompra->infoImpuestos = new stdClass();
+            $compraProcesarSolicitud->infoCompra->infoImpuestos->tipoImpuesto = 'IVA';
+            $compraProcesarSolicitud->infoCompra->infoImpuestos->monto = $obj->ivaTax;
+            $compraProcesarSolicitud->infoCompra->infoImpuestos->baseImpuesto = $obj->baseTax;
         }
 
-        $compraProcesarSolicitud->infoCompra->montoDetallado = array();
-        foreach ($obj->detailedAmount as $value) {
-            $values = new stdClass();
-            $values->tipoMontoDetallado = $value->detailedAmountType;
-            $values->monto = $value->detailedAmount;
-            $compraProcesarSolicitud->infoCompra->montoDetallado[] = $values;
+        $compraProcesarSolicitud->infoAdicional = new stdClass();
+        if ($obj->eci) {
+            $compraProcesarSolicitud->infoAdicional->eci = $obj->threeDSEci;
+            $compraProcesarSolicitud->infoAdicional->directoryServerTrxID = $obj->threeDSDirectoryServerTransactionId;
+            $compraProcesarSolicitud->infoAdicional->secVersion = $obj->threeDSSecVersion;
+            $compraProcesarSolicitud->infoAdicional->acctAuthValue = $obj->threeDSAcctAuthValue;
         }
 
-        $compraProcesarSolicitud->datosAdicionales = array();
-        foreach ($obj->additionalData as $value) {
-            $values = new stdClass();
-            $values->tipo = $value->type;
-            $values->valor = $value->value;
-            $compraProcesarSolicitud->datosAdicionales[] = $values;
+        if ($obj->paymentIndicator) {
+            $compraProcesarSolicitud->infoAdicional->infoPago = new stdClass();
+            $compraProcesarSolicitud->infoAdicional->infoPago->indicadorPago = $obj->paymentIndicator;
+            $compraProcesarSolicitud->infoAdicional->infoPago->tipoPago = $obj->paymentType;
+            $compraProcesarSolicitud->infoAdicional->infoPago->tipoMontoRecurrente = $obj->recurringAmountType;
+        }
+
+        if ($obj->softDescMarcTerminal) {
+            $compraProcesarSolicitud->infoCompra->infoFacilitador = new \stdClass();
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->marcTerminal = $obj->softDescMarcTerminal;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->FacilitadorID = $obj->softDescFacilitatorId;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->SalesOrgID = $obj->softDescSalesOrgId;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->SubMerchID = $obj->softDescSubMerchId;
         }
 
         return $compraProcesarSolicitud;

@@ -15,11 +15,11 @@ use Epayco\SdkRedeban\Validations\Electronic\ReverseValidation;
 
 class ElectronicPurchaseIntegration implements Integration
 {
-    private DataConfigSdkDto $dataConfigSdkRedeban;
+    private DataConfigSdkDto $sdkConfig;
 
     public function __construct()
     {
-        $this->dataConfigSdkRedeban = new DataConfigSdkDto();
+        $this->sdkConfig = new DataConfigSdkDto();
     }
 
     public function createTransaction(PurchaseDto $request,
@@ -54,38 +54,38 @@ class ElectronicPurchaseIntegration implements Integration
 
     public function setUsername($username): self
     {
-        $this->dataConfigSdkRedeban->username = $username;
+        $this->sdkConfig->username = $username;
         return $this;
     }
     public function setPassword($password): self
     {
-        $this->dataConfigSdkRedeban->password = $password;
+        $this->sdkConfig->password = $password;
         return $this;
     }
     public function setLocalCert($localCert): self
     {
-        $this->dataConfigSdkRedeban->localCert = $localCert;
+        $this->sdkConfig->localCert = $localCert;
         return $this;
     }
     public function setLocalPrivateKey($localPrivateKey): self
     {
-        $this->dataConfigSdkRedeban->localPrivateKey = $localPrivateKey;
+        $this->sdkConfig->localPrivateKey = $localPrivateKey;
         return $this;
     }
     public function setRedebanCert($redebanCert): self
     {
-        $this->dataConfigSdkRedeban->redebanCert = $redebanCert;
+        $this->sdkConfig->redebanCert = $redebanCert;
         return $this;
     }
 
     public function setEnvironment($environment): self
     {
-        $this->dataConfigSdkRedeban->environment = $environment;
+        $this->sdkConfig->environment = $environment;
         return $this;
     }
 
     public function build(): void
     {
-        PurchaseConfig::getInstance()->setConfig($this->dataConfigSdkRedeban);
+        PurchaseConfig::getInstance()->setConfig($this->sdkConfig);
     }
 }

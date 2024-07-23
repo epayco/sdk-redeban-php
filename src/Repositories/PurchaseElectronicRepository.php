@@ -24,7 +24,7 @@ class PurchaseElectronicRepository
      */
     public function purchase($data)
     {
-        $wsdlPath = 'process/CompraElectronicaService_2.wsdl';
+        $wsdlPath = 'process/CompraElectronicaService.wsdl';
 
         $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
 
@@ -48,13 +48,14 @@ class PurchaseElectronicRepository
      */
     public function getSoapSecutiryClient($wsdlPath): WSSESoapAdapter
     {
-        $environment = $this->sdkConfig->getConfig('environment') ?? 'test';
+        $ePurchaseConfig = $this->sdkConfig->getConfig();
+        $environment = $ePurchaseConfig->environment ?? 'test';
 
-        $urlWebService = realpath("$this->sdkRealPath/Utils/$environment/present/$wsdlPath");
+        $urlWebService = realpath("$this->sdkRealPath/Utils/$environment/electronic/$wsdlPath");
 
-        $localPrivateKey = $this->sdkConfig->getConfig('localPrivateKey');
-        $localCert = $this->sdkConfig->getConfig('localCert');
-        $serviceCert = $this->sdkConfig->getConfig('redebanCert');
+        $localPrivateKey = $ePurchaseConfig->localPrivateKey;
+        $localCert = $ePurchaseConfig->localCert;
+        $serviceCert = $ePurchaseConfig->redebanCert;
 
         $certs = $this->generateCertFiles();
 
@@ -76,8 +77,8 @@ class PurchaseElectronicRepository
 
         $paycoClient = new WSSESoapAdapter($urlWebService, $optionsSecurity);
 
-        $paycoClient->username = $this->sdkConfig->getConfig('username');
-        $paycoClient->password = $this->sdkConfig->getConfig('password');
+        $paycoClient->username = $ePurchaseConfig->username;
+        $paycoClient->password = $ePurchaseConfig->password;
         $paycoClient->localPrivateKey = $localPrivateKey;
         $paycoClient->localCert = $localCert;
         $paycoClient->serviceCert = $serviceCert;
@@ -85,28 +86,29 @@ class PurchaseElectronicRepository
         return $paycoClient;
     }
 
-    public function generateCertFiles(): array
+    protected function generateCertFiles(): array
     {
+        $ePurchaseConfig = $this->sdkConfig->getConfig();
         $certs = [];
-        $localPrivateKeyPath = $this->sdkRealPath . "/Utils/cert/present/local_key.pem";
-        $localCertPath = $this->sdkRealPath . "/Utils/cert/present/local_cert.pem";
-        $serviceCertPath = $this->sdkRealPath . "/Utils/cert/present/rbm_cert.pem";
+        $localPrivateKeyPath = $this->sdkRealPath . "/Utils/cert/electronic/local_key.pem";
+        $localCertPath = $this->sdkRealPath . "/Utils/cert/electronic/local_cert.pem";
+        $serviceCertPath = $this->sdkRealPath . "/Utils/cert/electronic/rbm_cert.pem";
         if (!file_exists($localPrivateKeyPath)) {
             file_put_contents(
                 $localPrivateKeyPath,
-                $this->sdkConfig->getConfig('localPrivateKey')
+                $ePurchaseConfig->localPrivateKey
             );
         }
         if (!file_exists($localCertPath)) {
             file_put_contents(
                 $localCertPath,
-                $this->sdkConfig->getConfig('localCert')
+                $ePurchaseConfig->localCert
             );
         }
         if (!file_exists($serviceCertPath)) {
             file_put_contents(
                 $serviceCertPath,
-                $this->sdkConfig->getConfig('serviceCert')
+                $ePurchaseConfig->redebanCert
             );
         }
         $certs['local_pk'] = realpath($localPrivateKeyPath);

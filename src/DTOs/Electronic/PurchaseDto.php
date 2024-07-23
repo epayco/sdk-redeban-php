@@ -15,22 +15,23 @@ class PurchaseDto
     public string $reference;
     public string $instalmentsQuantity;
     public string $paymentIndicator;
+    public string $paymentType;
     public string $recurringAmountType;
-    public string $paymentAccountType; // idTarjetaCredito idTarjetaDebito
+    public string $cardType; // idTarjetaCredito idTarjetaDebito
     public string $franchise;
     public string $cardNumber;
     public string $expirationDate;
     public ?string $securityCode;
     public ?string $personDocumentType;
     public ?string $personDocumentNumber;
-    public ?string $additionalInfoEci;
-    public ?string $directoryServerTransactionId;
-    public ?string $secVersion;
-    public ?string $acctAuthValue;
-    public ?string $marcTerminal;
-    public ?string $facilitatorId;
-    public ?string $salesOrgId;
-    public ?string $subMerchId;
+    public ?string $threeDSEci;
+    public ?string $threeDSDirectoryServerTransactionId;
+    public ?string $threeDSSecVersion;
+    public ?string $threeDSAcctAuthValue;
+    public ?string $softDescMarcTerminal;
+    public ?string $softDescFacilitatorId;
+    public ?string $softDescSalesOrgId;
+    public ?string $softDescSubMerchId;
     public function __construct()
     {
         $this->terminalType = "";
@@ -45,22 +46,23 @@ class PurchaseDto
         $this->reference = "";
         $this->instalmentsQuantity = "";
         $this->paymentIndicator = "";
+        $this->paymentType = "";
         $this->recurringAmountType = "";
-        $this->paymentAccountType = "";
+        $this->cardType = "";
         $this->franchise = "";
         $this->cardNumber = "";
         $this->expirationDate = "";
         $this->securityCode = null;
         $this->personDocumentType = null;
         $this->personDocumentNumber = null;
-        $this->additionalInfoEci = null;
-        $this->directoryServerTransactionId = null;
-        $this->secVersion = null;
-        $this->acctAuthValue = null;
-        $this->marcTerminal = null;
-        $this->facilitatorId = null;
-        $this->salesOrgId = null;
-        $this->subMerchId = null;
+        $this->threeDSEci = null;
+        $this->threeDSDirectoryServerTransactionId = null;
+        $this->threeDSSecVersion = null;
+        $this->threeDSAcctAuthValue = null;
+        $this->softDescMarcTerminal = null;
+        $this->softDescFacilitatorId = null;
+        $this->softDescSalesOrgId = null;
+        $this->softDescSubMerchId = null;
     }
 
 }
