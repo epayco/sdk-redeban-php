@@ -5,9 +5,9 @@ require_once '../../vendor/autoload.php';
 use Epayco\SdkRedeban\DTOs\Present\ShopDto;
 use Epayco\SdkRedeban\EpaycoSdkRedebanPresentSales;
 
-$localCert = file_get_contents("../certs/local_cert.pem");
-$localPrivateKey = file_get_contents("../certs/local_key.pem");
-$redebanKey = file_get_contents("../certs/rbm_cert.pem");
+$localCert = file_get_contents("crt/local_cert.pem");
+$localPrivateKey = file_get_contents("crt/local_key.pem");
+$redebanKey = file_get_contents("crt/rbm_cert.pem");
 
 $sdk = new EpaycoSdkRedebanPresentSales();
 $sdk->setUsername("TestAliEpayco")
@@ -22,7 +22,7 @@ $shopRequest = new ShopDto;
 $shopRequest->terminalType = "MPOS";
 $shopRequest->terminalId = "EPAYTERM";
 $shopRequest->acquirerId = "10203047";
-$shopRequest->terminalTransactionId = 3;
+$shopRequest->terminalTransactionId = 30003;
 $shopRequest->panCaptureMode = "CHIP";
 $shopRequest->pinCapability = "Permitido";
 $shopRequest->brand = "MasterCard";
@@ -33,7 +33,7 @@ $shopRequest->tokenStatus = "007510001f0300000001";
 $shopRequest->discreetData = "4B003149434360d8c8000000000000002200011f03000007a0000000031010000000000000000000";
 $shopRequest->totalAmount = 10000;
 $shopRequest->instalmentCount = 1;
-$shopRequest->reference = 11110;
+$shopRequest->reference = 1111003;
 
 $additional1 = new stdClass();
 $additional1->type = "C4";
@@ -51,4 +51,4 @@ $shopRequest->infoTax[] = $tax1;
 
 $shopRequest->detailedAmount = [];
 
-print_r($sdk->reverseTransaction($shopRequest));
+print_r($sdk->processTransaction($shopRequest));

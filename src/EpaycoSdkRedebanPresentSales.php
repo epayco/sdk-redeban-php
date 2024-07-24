@@ -2,16 +2,16 @@
 
 namespace Epayco\SdkRedeban;
 
+use Epayco\SdkRedeban\DTOs\Present\CancelDto;
 use Epayco\SdkRedeban\DTOs\Present\DataConfigSdkDto;
 use Epayco\SdkRedeban\DTOs\Present\ShopDto;
-use Epayco\SdkRedeban\DTOs\Present\VoidDto;
 use Epayco\SdkRedeban\Helpers\HelperResponse;
 use Epayco\SdkRedeban\Helpers\SDKConfig;
+use Epayco\SdkRedeban\Services\Present\CancelService;
 use Epayco\SdkRedeban\Services\Present\ReverseService;
 use Epayco\SdkRedeban\Services\Present\ShopService;
-use Epayco\SdkRedeban\Services\Present\VoidService;
+use Epayco\SdkRedeban\Validations\Present\CancelValidation;
 use Epayco\SdkRedeban\Validations\Present\ShopValidation;
-use Epayco\SdkRedeban\Validations\Present\VoidValidation;
 
 class EpaycoSdkRedebanPresentSales extends HelperResponse
 {
@@ -34,8 +34,11 @@ class EpaycoSdkRedebanPresentSales extends HelperResponse
 
     }
 
-    public function cancelTransaction(VoidDto $request, $voidValidation = new VoidValidation, $voidService = new VoidService)
-    { //anular
+    public function cancelTransaction(
+        CancelDto $request,
+        $voidValidation = new CancelValidation,
+        $voidService = new CancelService
+    ): array {
         if ($voidValidation($request)) {
             return $this->response($voidService($voidValidation->response), $voidService->outData);
         }
