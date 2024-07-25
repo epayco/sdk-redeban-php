@@ -2,6 +2,7 @@
 
 namespace Epayco\SdkRedeban\Services\Electronic;
 
+use Epayco\SdkRedeban\Helpers\Utils;
 use Epayco\SdkRedeban\Repositories\PurchaseElectronicRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
@@ -9,6 +10,7 @@ use stdClass;
 
 class PurchaseService extends Service
 {
+    use Utils;
     public mixed $outData;
     public function __invoke($data): bool
     {
@@ -25,14 +27,15 @@ class PurchaseService extends Service
             $redebanResponse = $e;
             $status = false;
         }
-        $restFinalPos['log_request']    = $request;
+        $restFinalPos['log_request']    = $this->removeCardData($request);
         $restFinalPos['log_response']   = $redebanResponse ?? null;
         $this->outData = $restFinalPos;
 
         return $status;
     }
 
-    public function generateRequestShop($obj): stdClass {
+    public function generateRequestShop($obj): stdClass
+    {
         $compraProcesarSolicitud = new stdClass();
 
         $compraProcesarSolicitud->cabeceraSolicitud = new stdClass();
@@ -83,7 +86,7 @@ class PurchaseService extends Service
         }
 
         if ($obj->softDescMarcTerminal) {
-            $compraProcesarSolicitud->infoCompra->infoFacilitador = new \stdClass();
+            $compraProcesarSolicitud->infoCompra->infoFacilitador = new stdClass();
             $compraProcesarSolicitud->infoCompra->infoFacilitador->marcTerminal = $obj->softDescMarcTerminal;
             $compraProcesarSolicitud->infoCompra->infoFacilitador->FacilitadorID = $obj->softDescFacilitatorId;
             $compraProcesarSolicitud->infoCompra->infoFacilitador->SalesOrgID = $obj->softDescSalesOrgId;

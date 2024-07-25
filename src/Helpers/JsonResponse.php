@@ -32,4 +32,5 @@ trait JsonResponse
 
         return json_encode($response);
     }
+
 }
