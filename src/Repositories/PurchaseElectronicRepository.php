@@ -4,7 +4,6 @@ namespace Epayco\SdkRedeban\Repositories;
 
 use Epayco\SdkRedeban\Adapters\WSSESoapAdapter;
 use Epayco\SdkRedeban\Helpers\PurchaseConfig;
-use Gaarf\XmlToPhp\Convertor;
 
 use SoapFault;
 
@@ -116,54 +115,6 @@ class PurchaseElectronicRepository
         $certs['cafile'] = realpath($serviceCertPath);
 
         return $certs;
-    }
-
-    private function voidResponse()
-    {
-        return '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://www.rbm.com.co/esb/comercio/compra/" xmlns:esb="http://www.rbm.com.co/esb/" xmlns:com1="http://www.rbm.com.co/esb/comercio/">
-            <soapenv:Body>
-               <com:compraCancelacionProcesarRespuesta>
-                  <com:cabeceraRespuesta>
-                     <com:infoPuntoInteraccion>
-                        <com1:tipoTerminal>WEB</com1:tipoTerminal>
-                        <com1:idTerminal>ESB10001</com1:idTerminal>
-                        <com1:idAdquiriente>0010203040</com1:idAdquiriente>
-                        <com1:idTransaccionTerminal>999999</com1:idTransaccionTerminal>
-                        <com1:modoCapturaPAN>CHIP</com1:modoCapturaPAN>
-                        <com1:capacidadPIN>Permitido</com1:capacidadPIN>
-                     </com:infoPuntoInteraccion>
-                  </com:cabeceraRespuesta>
-                  <com:infoRespuesta>
-                     <esb:codRespuesta>00</esb:codRespuesta>
-                     <esb:descRespuesta>Aprobado</esb:descRespuesta>
-                     <esb:estado>Aprobado</esb:estado>
-                  </com:infoRespuesta>
-                  <com:infoCompraResp>
-                     <com:fechaTransaccion>2019-08-15T21:27:04</com:fechaTransaccion>
-                     <com:fechaPosteo>2019-08-15</com:fechaPosteo>
-                     <com:numAprobacion>212825</com:numAprobacion>
-                  </com:infoCompraResp>
-                  <com:idTransaccionAutorizador>000000999998</com:idTransaccionAutorizador>
-                  <com:infoTerminal>
-                     <com1:nombreAdquiriente>NOMBRE ALIADOPOS</com1:nombreAdquiriente>
-                     <com1:infoUbicacion>
-                        <esb:ciudad>1100100BOGOTA</esb:ciudad>
-                        <esb:departamento>CUN</esb:departamento>
-                        <esb:pais>CO</esb:pais>
-                     </com1:infoUbicacion>
-                  </com:infoTerminal>
-               </com:compraCancelacionProcesarRespuesta>
-            </soapenv:Body>
-         </soapenv:Envelope>';
-    }
-
-    function void($objRequest)
-    {
-        //TODO ejecución del request anular
-
-        $xmlString = $this->voidResponse();
-        $data = Convertor::covertToArray($xmlString);
-        return $data;
     }
 
 }
