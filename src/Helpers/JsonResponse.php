@@ -2,14 +2,14 @@
 
 namespace Epayco\SdkRedeban\Helpers;
 
-class JsonResponse
+trait JsonResponse
 {
-    public static function response(bool $type, $response = null): ?string
+    public function response(bool $type, $response = null): ?string
     {
         return $type ? self::successResponse($response) : self::errorResponse($response);
     }
 
-    public static function successResponse($data = null, $message = "Success"): ?string
+    protected function successResponse($data = null, $message = "Success"): ?string
     {
         $response = [
             'success' => true,
@@ -21,7 +21,7 @@ class JsonResponse
         return json_encode($response);
     }
 
-    public static function errorResponse($data = null, $message = "Error"): ?string
+    protected function errorResponse($data = null, $message = "Error"): ?string
     {
         $response = [
             'success' => false,

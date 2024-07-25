@@ -15,6 +15,7 @@ use Epayco\SdkRedeban\Validations\Electronic\ReverseValidation;
 
 class ElectronicPurchaseIntegration implements Integration
 {
+    use JsonResponse;
     private DataConfigSdkDto $sdkConfig;
 
     public function __construct()
@@ -27,29 +28,30 @@ class ElectronicPurchaseIntegration implements Integration
                                       $service = new PurchaseService
     ): ?string {
         if ($validation($request)) {
-            return JsonResponse::response($service($validation->response), $service->outData);
+            return $this->response($service($validation->response), $service->outData);
         }
-        return JsonResponse::errorResponse($validation->response);
+        return $this->response($validation->response);
     }
 
-    public function getTransaction()
+    public function getTransaction(): string
     {
-        // TODO: Implement getTransaction() method.
+        return "Not implemented";
     }
 
-    public function refundTransaction()
+    public function refundTransaction(): string
     {
-        // TODO: Implement refundTransaction() method.
+        return "Not implemented";
     }
 
     public function undoTransaction(PurchaseDto $request,
                                     $validation = new ReverseValidation,
                                     $service = new ReverseService
     ): ?string {
-        if ($validation($request)) {
-            return JsonResponse::response($service($validation->response), $service->outData);
+        $validationResponse = $validation($request);
+        if ($validationResponse) {
+            return $this->response($service($validation->response), $service->outData);
         }
-        return JsonResponse::errorResponse($validation->response);
+        return $this->response($validation->response);
     }
 
     public function setUsername($username): self

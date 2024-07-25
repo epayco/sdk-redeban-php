@@ -23,7 +23,7 @@ $purchaseRequest = new PurchaseDto();
 
 $purchaseRequest->terminalType = "WEB";
 $purchaseRequest->terminalId = "SRB00315";
-$purchaseRequest->acquirerId = "10203158";
+$purchaseRequest->acquirerId = "11174646";
 $purchaseRequest->terminalTransactionId = 2;
 $purchaseRequest->panCaptureMode = "Manual";
 $purchaseRequest->pinCapability = "Virtual";
@@ -36,7 +36,7 @@ $purchaseRequest->cardType = 'idTarjetaCredito';
 $purchaseRequest->franchise = 'VISA';
 $purchaseRequest->cardNumber = "4513076106055348";
 $purchaseRequest->expirationDate = "2025-12-31";
-$purchaseRequest->securityCode = '';
+$purchaseRequest->securityCode = '123';
 $purchaseRequest->personDocumentType = 'CC';
 $purchaseRequest->personDocumentNumber = '1053814720';
 
@@ -59,5 +59,6 @@ $purchaseRequest->softDescSubMerchId = 627579;
 //"capacidadPIN":"Virtual"}},"idPersona":{"tipoDocumento":"CC","numDocumento":"17657489"},"infoMedioPago":{"idTarjetaCredito":{"franquicia":"MasterCard","numTarjeta":"5265570074946840",
 //"fechaExpiracion":"2025-12-31","codVerificacion":"123"}},"infoCompra":{"montoTotal":"10000.00","infoImpuestos":{"tipoImpuesto":"IVA","monto":"0.00","baseImpuesto":"0.00"},"referencia":101626310,"cantidadCuotas":1},"infoAdicional":{"eci":"02","directoryServerTrxID":"b70ef20a-82c7-4824-bd58-f01b8d1127fe","secVersion":"2.0","acctAuthValue":"xgQYYgZVAAAAAAAAAAAAAAAAAAAA"}}
 
-
-print_r($sdk->createTransaction($purchaseRequest));
+$response = $sdk->createTransaction($purchaseRequest);
+$response = json_decode($response);
+print_r($response);

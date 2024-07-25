@@ -23,8 +23,8 @@ $sdk->setUsername("TestAliEpayco")
 $purchaseRequest = new PurchaseDto();
 
 $purchaseRequest->terminalType = "WEB";
-$purchaseRequest->terminalId = "ESB20107";
-$purchaseRequest->acquirerId = "11174653";
+$purchaseRequest->terminalId = "SRB00315";//ESB20107
+$purchaseRequest->acquirerId = "11174646";//11174653
 $purchaseRequest->terminalTransactionId = 1;
 $purchaseRequest->panCaptureMode = "Manual";
 $purchaseRequest->pinCapability = "Virtual";
@@ -39,14 +39,14 @@ $purchaseRequest->recurringAmountType = '';
 
 $purchaseRequest->cardType = 'idTarjetaCredito';
 $purchaseRequest->franchise = 'MasterCard';
-$purchaseRequest->cardNumber = "5186000600001015";
+$purchaseRequest->cardNumber = "5265570074946840";
 $purchaseRequest->expirationDate = "2025-12-31";
-$purchaseRequest->securityCode = '';
+$purchaseRequest->securityCode = '123';
 $purchaseRequest->personDocumentType = 'CC';
 $purchaseRequest->personDocumentNumber = '10613254';
 
 $purchaseRequest->threeDSEci = '02'; // Para 3DS
-$purchaseRequest->threeDSDirectoryServerTransactionId = 'YjcwZWYyMGEtODJjNy00ODI0LWJkNTgtZjAxYjhkMTEyN2Zl';
+$purchaseRequest->threeDSDirectoryServerTransactionId = 'b70ef20a-82c7-4824-bd58-f01b8d1127fe';
 $purchaseRequest->threeDSSecVersion = '2.0';
 $purchaseRequest->threeDSAcctAuthValue = 'xgQYYgZVAAAAAAAAAAAAAAAAAAAA';
 
@@ -61,5 +61,6 @@ $purchaseRequest->softDescSubMerchId = 627579;
 //"cantidadCuotas":46,"infoFacilitador":{"marcTerminal":"EPAYCO*JorgeFlorezMart","FacilitadorID":"00000266029","SalesOrgID":"00000266029","SubMerchID":627579}},
 //"infoAdicional":{"infoPago":{"indicadorPago":"UCOF","tipoPago":"0","tipoMontoRecurrente":""}}}
 
-
-print_r($sdk->createTransaction($purchaseRequest));
+$response = $sdk->createTransaction($purchaseRequest);
+$response = json_decode($response);
+print_r($response);
