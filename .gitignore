@@ -6,9 +6,6 @@ composer.lock
 /DockerfileDebug
 /xdebug.log
 /docker/
-/src/Utils/cert/local_cert.pem
-/src/Utils/cert/local_key.pem
-/src/Utils/cert/rbm_cert.pem
 /src/Utils/cert/electronic/local_cert.pem
 /src/Utils/cert/electronic/local_key.pem
 /src/Utils/cert/electronic/rbm_cert.pem
