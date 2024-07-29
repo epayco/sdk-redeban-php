@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema elementFormDefault="qualified" targetNamespace="http://www.rbm.com.co/esb/comercio/compra/" xmlns:cmp="http://www.rbm.com.co/esb/comercio/compra/" xmlns:cmr="http://www.rbm.com.co/esb/comercio/" xmlns:rbm="http://www.rbm.com.co/esb/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://www.rbm.com.co/esb/comercio/" schemaLocation="comercio.xsd"/>
+    <xsd:import namespace="http://www.rbm.com.co/esb/" schemaLocation="redebanESB.xsd"/>
+    <xsd:complexType name="TipoInfoMedioPago">
+    <xsd:sequence>
+      <xsd:choice maxOccurs="1">
+    		<xsd:element name="idTrack" type="rbm:TipoIdTrack"/>
+    		<xsd:element name="idTarjetaDebitoPrivada" type="rbm:TipoIdTarjetaDebitoPrivada"/>
+    		<xsd:element name="idTarjetaCreditoPrivada" type="rbm:TipoIdTarjetaCreditoPrivada"/>
+    		<xsd:element name="idTarjetaCredito" type="rbm:TipoIdTarjetaCredito"/>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="TipoInfoCompra">
+    <xsd:sequence>
+      <xsd:element name="montoTotal" type="xsd:decimal"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="infoImpuestos" type="rbm:TipoInfoImpuestos"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="montoDetallado" type="rbm:TipoMontoDetallado"/>
+      <xsd:element minOccurs="0" name="referencia" type="cmp:TipoReferencia"/>
+      <xsd:element minOccurs="0" name="cantidadCuotas" type="cmp:TipoCantidadCuotas"/>
+      <xsd:element minOccurs="0" name="infoFacilitador" type="rbm:TipoInfoFacilitador"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="TipoCabeceraSolicitud">
+    <xsd:sequence>
+      <xsd:element name="infoPuntoInteraccion" type="cmr:TipoInfoPuntoInteraccion"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TipoSolicitudCompra">
+    <xsd:sequence>
+    	<xsd:element name="cabeceraSolicitud"
+    		type="cmp:TipoCabeceraSolicitud" />
+    	<xsd:element name="infoMedioPago" type="cmp:TipoInfoMedioPago" />
+      <xsd:element name="infoTokenizacion" type="cmp:TipoInfoTokenizacion" minOccurs="0"/>
+    	<xsd:element name="infoCompra" type="cmp:TipoInfoCompra" />
+    	<xsd:element name="infoPersona" type="rbm:TipoInfoPersona"
+    		maxOccurs="unbounded" minOccurs="0">
+    	</xsd:element>
+    	<xsd:element name="infoAdicional" type="cmp:TipoInfoSecure" maxOccurs="1" minOccurs="0"/>
+    </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TipoInfoCompraResp">
+    <xsd:sequence>
+      <xsd:element name="fechaTransaccion" type="xsd:dateTime"/>
+      <xsd:element name="fechaPosteo" type="xsd:date"/>
+      <xsd:element name="numAprobacion" type="rbm:TipoNumAprobacion"/>
+      <xsd:element minOccurs="0" name="costoTransaccion" type="rbm:TipoMonto"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="infoAdicional" type="rbm:TipoInfoAdicional"/>
+        </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="TipoRespuesta">
+    <xsd:sequence>
+      <xsd:element name="cabeceraRespuesta" type="cmp:TipoCabeceraSolicitud"/>
+      <xsd:element name="infoRespuesta" type="rbm:TipoInfoRespuesta"/>
+      <xsd:element minOccurs="0" name="infoCompraResp" type="cmp:TipoInfoCompraResp"/>
+            <xsd:element minOccurs="0" name="idTransaccionAutorizador" type="rbm:TipoIdTransaccionAutorizador"/>
+            <xsd:element minOccurs="0" name="infoTerminal" type="cmr:TipoInfoTerminal"/>
+        </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="TipoSolicitudCancelacion">
+    <xsd:sequence>
+      <xsd:element name="cabeceraSolicitud" type="cmp:TipoCabeceraSolicitud"/>
+      <xsd:element minOccurs="0" name="idPersona" type="rbm:TipoIdPersona"/>
+      <xsd:element name="infoMedioPago" type="cmp:TipoInfoMedioPago"/>
+      <xsd:element name="infoCompra" type="cmp:TipoInfoCompra"/>
+      <xsd:element name="infoRefCancelacion" type="rbm:TipoInfoRefCancelacion"/>
+      <xsd:element name="infoPersona" type="rbm:TipoInfoPersona" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:simpleType name="TipoReferencia">
+    <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="25"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:simpleType name="TipoCantidadCuotas">
+    <xsd:restriction base="xsd:int">
+      <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="99"/>
+        </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:complexType name="TipoInfoMedioPagoIdCuenta">
+    <xsd:sequence>
+      <xsd:element name="idCuenta" type="rbm:TipoIdCuenta"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="TipoInfoSecure">
+    	<xsd:sequence>
+    		<xsd:element name="eci" maxOccurs="1" minOccurs="0">
+    		</xsd:element>
+    		<xsd:element name="directoryServerTrxID"
+    			type="xsd:string" maxOccurs="1" minOccurs="0">
+    		</xsd:element>
+    		<xsd:element name="secVersion" maxOccurs="1" minOccurs="0">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="1.0"></xsd:enumeration>
+    					<xsd:enumeration value="2.0"></xsd:enumeration>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="acctAuthValue" type="xsd:string" minOccurs="0"></xsd:element>
+        <xsd:element name="infoPago" type="rbm:TipoInfoAdicionalPago" maxOccurs="1" minOccurs="0"/>
+        <xsd:element name="infoAutorizacion" type="rbm:TipoInfoAutorizacion" maxOccurs="1" minOccurs="0"/>
+    	</xsd:sequence>
+    </xsd:complexType>
+  <xsd:complexType name="TipoInfoTokenizacion">
+    <xsd:sequence>
+      <xsd:element name="Crypto" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="url" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="idTokenRequestor" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

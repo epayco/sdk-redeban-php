@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions name="CompraElectronica" targetNamespace="http://www.rbm.com.co/esb/comercio/compra/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.rbm.com.co/esb/comercio/compra/" xmlns:mrm="http://www.rbm.com.co/esb/comercio/compra/">
+      <xsd:include schemaLocation="compraElectronica.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="compraProcesar_in">
+    <wsdl:part element="tns:compraProcesarSolicitud" name="compraProcesarSolicitud"/>
+  </wsdl:message>
+  <wsdl:message name="compraProcesar_out">
+    <wsdl:part element="tns:compraProcesarRespuesta" name="compraProcesarRespuesta"/>
+  </wsdl:message>
+  <wsdl:message name="compraReversar_in">
+    <wsdl:part element="tns:compraReversarSolicitud" name="compraReversarSolicitud"/>
+  </wsdl:message>
+  <wsdl:message name="compraReversar_out">
+    <wsdl:part element="tns:compraReversarRespuesta" name="compraReversarRespuesta"/>
+  </wsdl:message>
+  <wsdl:portType name="CompraElectronica_MsgSetPortType">
+    <wsdl:operation name="compraProcesar">
+      <wsdl:input message="tns:compraProcesar_in" name="compraProcesar_Input"/>
+      <wsdl:output message="tns:compraProcesar_out" name="compraProcesar_Output"/>
+    </wsdl:operation>
+    <wsdl:operation name="compraReversar">
+      <wsdl:input message="tns:compraReversar_in" name="compraReversar_Input"/>
+      <wsdl:output message="tns:compraReversar_out" name="compraReversar_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CompraElectronica_HTTP_Binding" type="tns:CompraElectronica_MsgSetPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="compraProcesar">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="compraProcesar_Input">
+        <soap:body parts="compraProcesarSolicitud" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="compraProcesar_Output">
+        <soap:body parts="compraProcesarRespuesta" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="compraReversar">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="compraReversar_Input">
+        <soap:body parts="compraReversarSolicitud" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="compraReversar_Output">
+        <soap:body parts="compraReversarRespuesta" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CompraElectronica_HTTP_Service">
+    <wsdl:port binding="tns:CompraElectronica_HTTP_Binding" name="CompraElectronica_HTTP_Port">
+      <soap:address location="https://www.txstestrbm.com:9990/CompraElectronica/Compra"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

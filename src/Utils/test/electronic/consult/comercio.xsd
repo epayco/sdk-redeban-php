@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema elementFormDefault="qualified" targetNamespace="http://www.rbm.com.co/esb/comercio/" xmlns:cmr="http://www.rbm.com.co/esb/comercio/" xmlns:rbm="http://www.rbm.com.co/esb/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://www.rbm.com.co/esb/" schemaLocation="redebanESB.xsd"/>
+    <xsd:simpleType name="TipoTipoTerminal">
+    <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="WEB"/>
+                        <xsd:enumeration value="OrdenTelefonico"/>
+                        <xsd:enumeration value="POS"/>
+                        <xsd:enumeration value="Movil"/>
+                        <xsd:enumeration value="OrdenCorreo"/>
+                        <xsd:enumeration value="GlobalPay"/>
+                        <xsd:enumeration value="PEW"/>
+                        <xsd:enumeration value="SmartPhone"/>
+                        <xsd:enumeration value="Tablet"/>
+                        <xsd:enumeration value="TVDigital"/>
+                        <xsd:enumeration value="DatafonoWeb"/>
+                        <xsd:enumeration value="APPRBM"/>
+                        <xsd:enumeration value="APPBanco"/>
+                        <xsd:enumeration value="BilleteraImpresa"/>
+                        <xsd:enumeration value="BilleteraPOS"/>
+                        <xsd:enumeration value="BilleteraAPP"/>
+                        <xsd:enumeration value="BilleteraEComm"/>
+                        <xsd:enumeration value="BilleteraRBMovil"/>
+        </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:simpleType name="TipoIdTerminal">
+    <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="8"/>
+        </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:simpleType name="TipoIdAdquiriente">
+    <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="19"/>
+        </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:simpleType name="TipoIdTransaccionTerminal">
+    <xsd:restriction base="xsd:long">
+            <xsd:totalDigits value="6"/>
+        </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:simpleType name="TipoModoCapturaPAN">
+    <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Manual"/>
+            <xsd:enumeration value="Banda"/>
+            <xsd:enumeration value="Barras"/>
+            <xsd:enumeration value="OCR"/>
+            <xsd:enumeration value="CHIP"/>
+            <xsd:enumeration value="ContactlessBanda"/>
+            <xsd:enumeration value="ContactlessChip"/>
+            <xsd:enumeration value="Fallback"/>
+            <xsd:enumeration value="E-commerce"/>
+        </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:simpleType name="TipoCapacidadPIN">
+    <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Desconocido"/>
+            <xsd:enumeration value="Permitido"/>
+            <xsd:enumeration value="NoPermitido"/>
+            <xsd:enumeration value="FueraDeServicio"/>
+            <xsd:enumeration value="Verificado"/>
+            <xsd:enumeration value="NoPermitidoBatch"/>
+            <xsd:enumeration value="Virtual"/>
+        </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:complexType name="TipoInfoPuntoInteraccion">
+    <xsd:sequence>
+      <xsd:element name="tipoTerminal" type="cmr:TipoTipoTerminal"/>
+      <xsd:element name="idTerminal" type="cmr:TipoIdTerminal"/>
+      <xsd:element name="idAdquiriente" type="cmr:TipoIdAdquiriente"/>
+      <xsd:element name="idTransaccionTerminal" type="cmr:TipoIdTransaccionTerminal"/>
+      <xsd:element name="modoCapturaPAN" type="cmr:TipoModoCapturaPAN"/>
+      <xsd:element name="capacidadPIN" type="cmr:TipoCapacidadPIN"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="TipoInfoTerminal">
+    <xsd:sequence>
+      <xsd:element name="nombreAdquiriente" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="infoUbicacion" type="rbm:TipoInfoUbicacion"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
