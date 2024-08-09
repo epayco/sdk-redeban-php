@@ -2,35 +2,40 @@
 
 namespace Epayco\SdkRedeban\Helpers;
 
+use Epayco\SdkRedeban\DTOs\Electronic\ResponseEpurchaseDto;
+
 trait JsonResponse
 {
-    public function response(bool $type, $response = null): ?string
+    protected ResponseEpurchaseDto $response;
+    public function response(bool $type, $data = null, $logs = null): ?string
     {
-        return $type ? self::successResponse($response) : self::errorResponse($response);
+        $this->response = new ResponseEpurchaseDto();
+        return $type ? self::successResponse("Success", $logs, $data)
+            : self::errorResponse('Error', $logs, $data);
     }
 
-    protected function successResponse($data = null, $message = "Success"): ?string
+    protected function successResponse($message, $logs, $data = null): ?string
     {
-        $response = [
-            'success' => true,
-            'code' => 200,
-            'message' => $message,
-            'data' => $data,
-        ];
+        $this->response->success = true;
+        $this->response->code = 200;
+        $this->response->message = $message;
+        $this->response->data = $data;
+        $this->response->request = $logs->request;
+        $this->response->response = $logs->response;
 
-        return json_encode($response);
+        return json_encode($this->response);
     }
 
-    protected function errorResponse($data = null, $message = "Error"): ?string
+    protected function errorResponse($message, $logs, $data = null): ?string
     {
-        $response = [
-            'success' => false,
-            'code' => 500,
-            'message' => $message,
-            'data' => $data,
-        ];
+        $this->response->success = false;
+        $this->response->code = 500;
+        $this->response->message = $message;
+        $this->response->data = $data;
+        $this->response->request = $logs->request;
+        $this->response->response = $logs->response;
 
-        return json_encode($response);
+        return json_encode($this->response);
     }
 
 }

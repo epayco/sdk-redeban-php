@@ -5,7 +5,7 @@ namespace Epayco\SdkRedeban\Validations\Electronic;
 use Epayco\SdkRedeban\Validations\Validation;
 use Respect\Validation\Validator as v;
 
-class PurchaseValidation extends Validation
+class RefundValidation extends Validation
 {
     protected const TERMINAL_TYPE = ['WEB'];
     protected const CARD_TYPE = ['idTarjetaCredito', 'idTarjetaDebito'];
@@ -38,20 +38,13 @@ class PurchaseValidation extends Validation
             'securityCode' => v::optional(v::stringVal()->length(0, 6)),
             'personDocumentType' => v::optional(v::stringVal()->in(self::PERSON_DOCUMENT_TYPE, true)),
             'personDocumentNumber' => v::optional(v::stringVal()->length(0, 20)),
-            'threeDSEci' => v::optional(v::stringVal()->length(0, 100)),
-            'threeDSDirectoryServerTransactionId' => v::optional(v::stringVal()->length(0, 700)),
-            'threeDSSecVersion' => v::optional(v::stringVal()->length(0, 10)),
-            'threeDSAcctAuthValue' => v::optional(v::stringVal()->length(0, 100)),
-            'softDescMarcTerminal' => v::optional(v::stringVal()->length(0, 100)),
-            'softDescFacilitatorId' => v::optional(v::stringVal()->length(0, 100)),
-            'softDescSalesOrgId' => v::optional(v::stringVal()->length(0, 100)),
-            'softDescSubMerchId' => v::optional(v::stringVal()->length(0, 30)),
+            'refundApprovalNumber' => v::notEmpty()->stringVal()->length(2, 50),
+            'refundAuthorizerTransactionId' => v::notEmpty()->numericVal()->positive(),
             'infoPersonAddress' => v::optional(v::stringVal()->length(0, 200)),
             'infoPersonCity' => v::optional(v::stringVal()->length(0, 150)),
             'infoPersonDepartment' => v::optional(v::stringVal()->length(0, 5)),
             'infoPersonCommerceEmail' => v::optional(v::stringVal()->length(0, 300)->email()),
             'infoPersonPhone' => v::optional(v::stringVal()->length(0, 30)),
-            'infoPersonCellphone' => v::optional(v::stringVal()->length(0, 30)),
         ];
 
         $errorMessages = [
@@ -76,14 +69,8 @@ class PurchaseValidation extends Validation
             'securityCode' => 'El campo securityCode debe ser un string.',
             'personDocumentType' => 'El campo personDocumentType debe tener uno de los siguientes valores: ' . implode(', ', self::PERSON_DOCUMENT_TYPE),
             'personDocumentNumber' => 'El campo personDocumentNumber debe ser un string.',
-            'threeDSEci' => 'El campo threeDSEci debe ser un string.',
-            'threeDSDirectoryServerTransactionId' => 'El campo threeDSDirectoryServerTransactionId debe ser un string.',
-            'threeDSSecVersion' => 'El campo threeDSSecVersion debe ser un string.',
-            'threeDSAcctAuthValue' => 'El campo threeDSAcctAuthValue debe ser un string.',
-            'softDescMarcTerminal' => 'El campo softDescMarcTerminal debe ser un string.',
-            'softDescFacilitatorId' => 'El campo softDescFacilitatorId debe ser un string.',
-            'softDescSalesOrgId' => 'El campo softDescSalesOrgId debe ser un string.',
-            'softDescSubMerchId' => 'El campo softDescSubMerchId debe ser un string.',
+            'refundApprovalNumber' => 'El campo refundApprovalNumber es requerido y debe ser un string.',
+            'refundAuthorizerTransactionId' => 'El campo refundAuthorizerTransactionId es requerido y debe ser un número entero.',
             'infoPersonAddress' => 'El campo infoPersonAddress debe ser un string.',
             'infoPersonCity' => 'El campo infoPersonCity debe ser un string.',
             'infoPersonDepartment' => 'El campo infoPersonDepartment debe ser un string.',

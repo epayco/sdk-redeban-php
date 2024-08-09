@@ -12,29 +12,31 @@ class PurchaseService extends Service
 {
     use Utils;
     public mixed $outData;
-    public function __invoke($data): bool
+    public mixed $logs;
+    public function purchase($data): bool
     {
         $restFinalPos = [];
         $obj = json_decode(json_encode($data));
-        $request = $this->generateRequestShop($obj);
+        $request = $this->generatePurchaseRequest($obj);
         $redebanRepository = new PurchaseElectronicRepository();
         try {
-            $redebanResponse = $redebanRepository->purchase($request);
-            $restFinalPos = (array)$redebanResponse ?? [];
+            $maskedCardNumber = $this->maskCardNumber($obj->cardNumber);
+            $purchaseResponse = $redebanRepository->purchase($request, $maskedCardNumber);
+            $providerResponse = $purchaseResponse->providerResponse ?? null;
+            $restFinalPos = (array)$providerResponse ?? [];
 
-            $status = isset($redebanResponse->infoRespuesta->codRespuesta) && $redebanResponse->infoRespuesta->codRespuesta == '00';
+            $status = isset($providerResponse->infoRespuesta->codRespuesta) && $providerResponse->infoRespuesta->codRespuesta == '00';
         } catch(Exception $e) {
-            $redebanResponse = $e;
+            $providerResponse = $e->getMessage();
             $status = false;
         }
-        $restFinalPos['log_request']    = $this->removeCardData($request);
-        $restFinalPos['log_response']   = $redebanResponse ?? null;
+        $this->logs = $purchaseResponse->logs ?? $providerResponse ?? null;
         $this->outData = $restFinalPos;
 
         return $status;
     }
 
-    public function generateRequestShop($obj): stdClass
+    public function generatePurchaseRequest($obj): stdClass
     {
         $compraProcesarSolicitud = new stdClass();
 
@@ -93,7 +95,38 @@ class PurchaseService extends Service
             $compraProcesarSolicitud->infoCompra->infoFacilitador->SubMerchID = $obj->softDescSubMerchId;
         }
 
+        if ($obj->softDescMarcTerminal) {
+            $compraProcesarSolicitud->infoCompra->infoFacilitador = new stdClass();
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->marcTerminal = $obj->softDescMarcTerminal;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->FacilitadorID = $obj->softDescFacilitatorId;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->SalesOrgID = $obj->softDescSalesOrgId;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->SubMerchID = $obj->softDescSubMerchId;
+        }
+
+        if ($obj->infoPersonAddress) {
+            $compraProcesarSolicitud->infoPersona = new stdClass();
+            $compraProcesarSolicitud->infoPersona->direccion = $obj->infoPersonAddress;
+            $compraProcesarSolicitud->infoPersona->ciudad = $obj->infoPersonCity;
+            $compraProcesarSolicitud->infoPersona->departamento = $obj->infoPersonDepartment;
+            $compraProcesarSolicitud->infoPersona->emailComercio = $obj->infoPersonCommerceEmail;
+            $compraProcesarSolicitud->infoPersona->telefonoFijo = $obj->infoPersonPhone;
+            $compraProcesarSolicitud->infoPersona->celular = $obj->infoPersonCellphone;
+        }
+
+        if ($obj->softDescMarcTerminal) {
+            $compraProcesarSolicitud->infoCompra->infoFacilitador = new stdClass();
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->marcTerminal = $obj->softDescMarcTerminal;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->FacilitadorID = $obj->softDescFacilitatorId;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->SalesOrgID = $obj->softDescSalesOrgId;
+            $compraProcesarSolicitud->infoCompra->infoFacilitador->SubMerchID = $obj->softDescSubMerchId;
+        }
+
         return $compraProcesarSolicitud;
+    }
+
+    private function maskCardNumber(string $cardNumber): string
+    {
+        return substr($cardNumber, 0, 6) . substr($cardNumber, -4);
     }
 
 }

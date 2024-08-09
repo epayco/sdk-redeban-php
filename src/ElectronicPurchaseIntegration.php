@@ -2,16 +2,20 @@
 
 namespace Epayco\SdkRedeban;
 
+use Epayco\SdkRedeban\DTOs\Electronic\RefundDto;
 use Epayco\SdkRedeban\DTOs\Electronic\DataConfigSdkDto;
 use Epayco\SdkRedeban\DTOs\Electronic\PurchaseDto;
+use Epayco\SdkRedeban\DTOs\Electronic\ShowTransactionDto;
 use Epayco\SdkRedeban\Helpers\JsonResponse;
 use Epayco\SdkRedeban\Helpers\PurchaseConfig;
 use Epayco\SdkRedeban\Interfaces\Electronic\Integration;
+use Epayco\SdkRedeban\Services\Electronic\RefundService;
 use Epayco\SdkRedeban\Services\Electronic\PurchaseService;
 use Epayco\SdkRedeban\Services\Electronic\ReverseService;
+use Epayco\SdkRedeban\Services\Electronic\ShowService;
+use Epayco\SdkRedeban\Validations\Electronic\RefundValidation;
 use Epayco\SdkRedeban\Validations\Electronic\PurchaseValidation;
-use Epayco\SdkRedeban\Validations\Electronic\ReverseValidation;
-
+use Epayco\SdkRedeban\Validations\Electronic\ShowValidation;
 
 class ElectronicPurchaseIntegration implements Integration
 {
@@ -28,30 +32,61 @@ class ElectronicPurchaseIntegration implements Integration
                                       $service = new PurchaseService
     ): ?string {
         if ($validation($request)) {
-            return $this->response($service($validation->response), $service->outData);
+            return $this->response(
+                $service->purchase($validation->response),
+                $service->outData,
+                $service->logs
+            );
         }
-        return $this->response($validation->response);
+        return $this->response(false, $validation->response);
     }
 
-    public function getTransaction(): string
+    public function getTransaction(
+        ShowTransactionDto $request,
+        $validation = new ShowValidation,
+        $service = new ShowService
+    ): ?string
     {
-        return "Not implemented";
+        $validationResponse = $validation($request);
+        if ($validationResponse) {
+            return $this->response(
+                $service->show($validation->response),
+                $service->outData,
+                $service->logs
+            );
+        }
+        return $this->response(false, $validation->response);
     }
 
-    public function refundTransaction(): string
-    {
-        return "Not implemented";
+    public function refundTransaction(
+        RefundDto $request,
+        $validation = new RefundValidation,
+        $service = new RefundService
+    ): ?string {
+        $validationResponse = $validation($request);
+        if ($validationResponse) {
+            return $this->response(
+                $service->refund($validation->response),
+                $service->outData,
+                $service->logs
+            );
+        }
+        return $this->response(false, $validation->response);
     }
 
     public function undoTransaction(PurchaseDto $request,
-                                    $validation = new ReverseValidation,
+                                    $validation = new PurchaseValidation,
                                     $service = new ReverseService
     ): ?string {
         $validationResponse = $validation($request);
         if ($validationResponse) {
-            return $this->response($service($validation->response), $service->outData);
+            return $this->response(
+                $service->reverse($validation->response),
+                $service->outData,
+                $service->logs
+            );
         }
-        return $this->response($validation->response);
+        return $this->response(false, $validation->response);
     }
 
     public function setUsername($username): self
