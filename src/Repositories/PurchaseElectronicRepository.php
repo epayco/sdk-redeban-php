@@ -6,6 +6,7 @@ use Epayco\SdkRedeban\Adapters\WSSESoapAdapter;
 use Epayco\SdkRedeban\Helpers\PurchaseConfig;
 
 use SoapFault;
+use stdClass;
 
 class PurchaseElectronicRepository
 {
@@ -21,25 +22,64 @@ class PurchaseElectronicRepository
     /**
      * @throws SoapFault
      */
-    public function purchase($data)
+    public function purchase($data, $maskCard): ?stdClass
     {
+        $response = new stdClass();
         $wsdlPath = 'process/CompraElectronicaService.wsdl';
-
         $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
 
-        return $paycoClient->compraProcesar($data);
+        $response->providerResponse = $paycoClient->compraProcesar($data);
+        $response->logs = $this->getXmlRequestResponse($paycoClient, $maskCard);
+
+        return $response;
     }
 
     /**
      * @throws SoapFault
      */
-    public function reverse($data)
+    public function show($data): ?stdClass
     {
-        $wsdlPath = 'process/CompraElectronicaService_2.wsdl';
+        $response = new stdClass();
+        $wsdlPath = 'consult/ConsultaEstadoDePagoService.wsdl';
 
         $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
 
-        return $paycoClient->compraReversar($data);
+        $response->providerResponse = $paycoClient->ConsultaEstadoDePago($data);
+        $response->logs = $this->getXmlRequestResponse($paycoClient);
+
+        return $response;
+    }
+
+    /**
+     * @throws SoapFault
+     */
+    public function reverse($data, $maskCard): ?stdClass
+    {
+        $response = new stdClass();
+        $wsdlPath = 'process/CompraElectronicaService.wsdl';
+
+        $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
+
+        $response->providerResponse = $paycoClient->compraReversar($data);
+        $response->logs = $this->getXmlRequestResponse($paycoClient, $maskCard);
+
+        return $response;
+    }
+
+    /**
+     * @throws SoapFault
+     */
+    public function refund($data, $maskCard): ?stdClass
+    {
+        $response = new stdClass();
+        $wsdlPath = 'cancel/CompraElectronicaCancelacionService.wsdl';
+
+        $paycoClient = $this->getSoapSecutiryClient($wsdlPath);
+
+        $response->providerResponse = $paycoClient->compraCancelacionProcesar($data);
+        $response->logs = $this->getXmlRequestResponse($paycoClient, $maskCard);
+
+        return $response;
     }
 
     /**
@@ -115,6 +155,37 @@ class PurchaseElectronicRepository
         $certs['cafile'] = realpath($serviceCertPath);
 
         return $certs;
+    }
+
+    protected function getXmlRequestResponse(WSSESoapAdapter $paycoClient, ?string $maskedCard = null): stdClass
+    {
+        $xml = new stdClass();
+        $xmlRequest = $paycoClient->__getLastRequest() ?? '';
+        $xml->request = $maskedCard ? $this->cleanXmlRequest($maskedCard, $xmlRequest) : $xmlRequest;
+        $xml->response = $paycoClient->__getLastResponse() ?? '';
+
+        return $xml;
+    }
+
+    private function cleanXmlRequest(string $maskedCard, string $xmlRequest): ?string
+    {
+        if (!$xmlRequest) {
+            return null;
+        }
+
+        $xmlRequest = $this->replaceTagContent('numTarjeta', $maskedCard, $xmlRequest);
+        $xmlRequest = $this->replaceTagContent('codVerificacion', '', $xmlRequest);
+        return $this->replaceTagContent('fechaExpiracion', '', $xmlRequest);
+    }
+
+    private function replaceTagContent(string $tagName, string $newContent, string $xml): string
+    {
+        $replacement = "<ns3:$tagName>$newContent</ns3:$tagName>";
+        return preg_replace(
+            "#(<ns3:$tagName.*?>).*?(</ns3:$tagName>)#",
+            $replacement,
+            $xml
+        );
     }
 
 }

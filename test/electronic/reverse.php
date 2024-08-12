@@ -24,13 +24,13 @@ $purchaseRequest = new PurchaseDto();
 $purchaseRequest->terminalType = "WEB";
 $purchaseRequest->terminalId = "SRB00315";//ESB20107
 $purchaseRequest->acquirerId = "11174646";//11174653
-$purchaseRequest->terminalTransactionId = 333339;
+$purchaseRequest->terminalTransactionId = 333335;
 $purchaseRequest->panCaptureMode = "Manual";
 $purchaseRequest->pinCapability = "Virtual";
-$purchaseRequest->totalAmount = 59500;
-$purchaseRequest->ivaTax = 9500;
-$purchaseRequest->baseTax = 50000;
-$purchaseRequest->reference = 222229;
+$purchaseRequest->totalAmount = 5000;
+$purchaseRequest->ivaTax = 500;
+$purchaseRequest->baseTax = 500;
+$purchaseRequest->reference = 222225;
 $purchaseRequest->instalmentsQuantity = 1;
 $purchaseRequest->paymentIndicator = "UCOF"; // Solo para MasterCard
 $purchaseRequest->paymentType = "0";
@@ -49,17 +49,11 @@ $purchaseRequest->threeDSDirectoryServerTransactionId = 'b70ef20a-82c7-4824-bd58
 $purchaseRequest->threeDSSecVersion = '2.0';
 $purchaseRequest->threeDSAcctAuthValue = 'xgQYYgZVAAAAAAAAAAAAAAAAAAAA';
 
-$purchaseRequest->softDescMarcTerminal = 'EPAYCO*RogertCastillo';// Para soft descriptor
+$purchaseRequest->softDescMarcTerminal = 'EPAYCO*JorgeFlorezMart';// Para soft descriptor
 $purchaseRequest->softDescFacilitatorId = '00000266029';
 $purchaseRequest->softDescSalesOrgId = '00000266029';
 $purchaseRequest->softDescSubMerchId = 627579;
 
-//{"cabeceraSolicitud":{"infoPuntoInteraccion":{"idTerminal":"ESB20107","idAdquiriente":"11174653","idTransaccionTerminal":4805,"tipoTerminal":"WEB","modoCapturaPAN":"Manual",
-//"capacidadPIN":"Virtual"}},"idPersona":{"tipoDocumento":"CC","numDocumento":"1067860923"},"infoMedioPago":{"idTarjetaCredito":{"franquicia":"MasterCard","numTarjeta":"5186000600001015",
-//"fechaExpiracion":"2025-12-31","codVerificacion":""}},"infoCompra":{"montoTotal":59500,"infoImpuestos":{"tipoImpuesto":"IVA","monto":9500,"baseImpuesto":50000},"referencia":101626288,
-//"cantidadCuotas":46,"infoFacilitador":{"marcTerminal":"EPAYCO*JorgeFlorezMart","FacilitadorID":"00000266029","SalesOrgID":"00000266029","SubMerchID":627579}},
-//"infoAdicional":{"infoPago":{"indicadorPago":"UCOF","tipoPago":"0","tipoMontoRecurrente":""}}}
-
-$response = $sdk->createTransaction($purchaseRequest);
+$response = $sdk->undoTransaction($purchaseRequest);
 $response = json_decode($response);
 print_r($response);

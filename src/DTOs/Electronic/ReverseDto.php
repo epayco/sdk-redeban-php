@@ -1,7 +1,7 @@
 <?php
 namespace Epayco\SdkRedeban\DTOs\Electronic;
 
-class PurchaseDto
+class ReverseDto
 {
     public string $terminalType;
     public string $terminalId;
