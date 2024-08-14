@@ -27,7 +27,9 @@
 		"nesbot/carbon": "^2.16",
 		"gaarf/xml-to-php-array": "^1.0",
 		"ext-openssl": "*",
-		"web-token/jwt-encryption-algorithm-aescbc": "*"
+		"web-token/jwt-encryption-algorithm-aescbc": "*",
+		"firebase/php-jwt": "^6.10",
+		"guzzlehttp/guzzle": "^7.9"
 	},
 	"scripts": {
 		"post-install-cmd": "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\" && php composer-setup.php --install-dir=bin --filename=composer && php -r \"unlink('composer-setup.php');\" && composer install"

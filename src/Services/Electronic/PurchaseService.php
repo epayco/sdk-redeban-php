@@ -2,7 +2,6 @@
 
 namespace Epayco\SdkRedeban\Services\Electronic;
 
-use Epayco\SdkRedeban\Helpers\Utils;
 use Epayco\SdkRedeban\Repositories\PurchaseElectronicRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
@@ -10,7 +9,6 @@ use stdClass;
 
 class PurchaseService extends Service
 {
-    use Utils;
     public mixed $outData;
     public mixed $logs;
     public function purchase($data): bool
