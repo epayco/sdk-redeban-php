@@ -2,6 +2,7 @@
 namespace Epayco\SdkRedeban\Services\Apisac;
 
 use Epayco\SdkRedeban\Helpers\Apisac\ApiSacConfig;
+use Epayco\SdkRedeban\Helpers\Apisac\ApiSacParams;
 use Epayco\SdkRedeban\Helpers\Apisac\EncryptionManager;
 use Epayco\SdkRedeban\Helpers\Apisac\RSAEncryption;
 use Epayco\SdkRedeban\Repositories\ApiSacRepository;
@@ -11,29 +12,38 @@ use stdClass;
 
 class RefundService extends Service
 {
+    use ApiSacParams;
+
     public mixed $outData;
     public mixed $logs;
-    private ApiSacConfig $sdkConfig;
     private const TOTAL_ADJUSTMENT_TYPE = 'T';
     private const PARTIAL_ADJUSTMENT_TYPE = 'P';
     public function refund($inputData): bool
     {
         $restFinalPos = [];
+        $rsaEncryption = new RSAEncryption();
+        $encryptionManager = new EncryptionManager($rsaEncryption);
         $obj = json_decode(json_encode($inputData));
         $refundRequest = $this->generateRefundRequest($obj);
-        $encryptedRequest = $this->encryptRequest($refundRequest);
+        $encryptedRequest = $encryptionManager->encryptData(json_encode($refundRequest), null);
+        $status = false;
         try {
             $redebanRepository = new ApiSacRepository();
             $refundResponse = $redebanRepository->refund($encryptedRequest);
-            $providerResponse = $refundResponse->providerResponse ?? null;
-            $restFinalPos = (array)$providerResponse ?? [];
+            if (isset($refundResponse->success) && $refundResponse->success) {
+                $decryptedData = $encryptionManager->decryptData($refundResponse->data, null);
 
-            $status = isset($providerResponse->infoRespuesta->codRespuesta) && $providerResponse->infoRespuesta->codRespuesta == '00';
+                $restFinalPos = (array)$decryptedData ?? [];
+                $this->logs = (object)[
+                    'request' => $refundRequest,
+                    'response' => $decryptedData,
+                ];
+                $status = isset($decryptedData->codRespuesta) && $decryptedData->codRespuesta == '00';
+            }
+
         } catch(Exception $e) {
-            $providerResponse = $e->getMessage();
-            $status = false;
+            $this->logs = $e->getMessage();
         }
-        $this->logs = $refundResponse->logs ?? $providerResponse ?? null;
         $this->outData = $restFinalPos;
 
         return $status;
@@ -42,8 +52,9 @@ class RefundService extends Service
 
     public function generateRefundRequest($obj): stdClass
     {
-        $this->sdkConfig = ApiSacConfig::getInstance();
-        $apiSacConfig = $this->sdkConfig->getConfig();
+        $sdkConfig = ApiSacConfig::getInstance();
+        $apiSacConfig = $sdkConfig->getConfig();
+        $apiSacParams = $this->getParams($apiSacConfig->environment);
 
         $refundRequest = new stdClass();
 
@@ -57,16 +68,9 @@ class RefundService extends Service
             $refundRequest->valorAjuste = $obj->adjustmentAmount;
             $refundRequest->tipoAjuste = self::PARTIAL_ADJUSTMENT_TYPE;
         }
-        $refundRequest->IDPasarela = $apiSacConfig->redebanClientId;
+        $refundRequest->IDPasarela = $apiSacParams->clientId;
 
         return $refundRequest;
-    }
-
-    public function encryptRequest(mixed $request)
-    {
-        $rsaEncryption = new RSAEncryption();
-        $encryptionManager = new EncryptionManager($rsaEncryption);
-        return $encryptionManager->encryptData($request, []);
     }
 
 }

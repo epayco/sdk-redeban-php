@@ -3,9 +3,12 @@
 namespace Epayco\SdkRedeban;
 
 use Epayco\SdkRedeban\DTOs\Apisac\DataConfigSdkDto;
+use Epayco\SdkRedeban\DTOs\Apisac\RefundDto;
 use Epayco\SdkRedeban\Helpers\Apisac\ApiSacConfig;
 use Epayco\SdkRedeban\Helpers\JsonResponse;
 use Epayco\SdkRedeban\Interfaces\Refund;
+use Epayco\SdkRedeban\Services\Apisac\RefundService;
+use Epayco\SdkRedeban\Validations\Apisac\RefundValidation;
 
 class ApiSacIntegration implements Refund
 {
@@ -17,11 +20,13 @@ class ApiSacIntegration implements Refund
         $this->sdkConfig = new DataConfigSdkDto();
     }
 
-    public function refundTransaction(
-        RefundDto $request,
+    public function refundTransaction($request,
                    $validation = new RefundValidation,
                    $service = new RefundService
     ): ?string {
+        if (!$request instanceof RefundDto) {
+            return $this->response(false, "Datos de entrada incorrectos");
+        }
         $validationResponse = $validation($request);
         if ($validationResponse) {
             return $this->response(

@@ -62,10 +62,13 @@ class ElectronicPurchaseIntegration implements Purchase, Show, Refund, Undo
     }
 
     public function refundTransaction(
-        ?RefundDto $request,
+        $request,
         $validation = new RefundValidation,
         $service = new RefundService
     ): ?string {
+        if (!$request instanceof RefundDto) {
+            return $this->response(false, "Datos de entrada incorrectos");
+        }
         $validationResponse = $validation($request);
         if ($validationResponse) {
             return $this->response(
