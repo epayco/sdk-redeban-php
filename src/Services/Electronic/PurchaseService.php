@@ -71,7 +71,7 @@ class PurchaseService extends Service
         }
 
         $compraProcesarSolicitud->infoAdicional = new stdClass();
-        if ($obj->eci) {
+        if ($obj->threeDSEci) {
             $compraProcesarSolicitud->infoAdicional->eci = $obj->threeDSEci;
             $compraProcesarSolicitud->infoAdicional->directoryServerTrxID = $obj->threeDSDirectoryServerTransactionId;
             $compraProcesarSolicitud->infoAdicional->secVersion = $obj->threeDSSecVersion;
