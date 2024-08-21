@@ -2,6 +2,7 @@
 
 namespace Epayco\SdkRedeban\Services\Present;
 
+use Epayco\SdkRedeban\Helpers\UtilsPresentSales;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
@@ -9,6 +10,7 @@ use stdClass;
 
 class CancelService extends Service
 {
+    use UtilsPresentSales;
     public mixed $outData;
     public function __invoke($data): bool
     {
@@ -25,7 +27,7 @@ class CancelService extends Service
             $redebanResponse = $e;
             $status = false;
         }
-        $restFinalPos['log_request']    = $request;
+        $restFinalPos['log_request']    = $this->removeCardData($request);
         $restFinalPos['log_response']   = $redebanResponse ?? null;
         $this->outData = $restFinalPos;
 

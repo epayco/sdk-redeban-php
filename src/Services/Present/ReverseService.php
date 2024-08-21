@@ -1,12 +1,14 @@
 <?php
 namespace Epayco\SdkRedeban\Services\Present;
 
+use Epayco\SdkRedeban\Helpers\UtilsPresentSales;
 use Epayco\SdkRedeban\Repositories\RedebanRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
 
 class ReverseService extends Service
 {
+    use UtilsPresentSales;
     protected const MAX_RETRY_REVERSE_REDEBAN = 3;
     public mixed $outData;
     public function __invoke($inputData): bool
@@ -29,7 +31,7 @@ class ReverseService extends Service
             $redebanResponse = $e;
             $status = false;
         }
-        $restFinalPos['log_request']    = $reverseRequest;
+        $restFinalPos['log_request']    = $this->removeCardData($reverseRequest);
         $restFinalPos['log_response']   = $redebanResponse ?? null;
         $this->outData = $restFinalPos;
 
