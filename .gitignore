@@ -14,3 +14,4 @@ composer.lock
 /src/Utils/cert/present/rbm_cert.pem
 /test/electronic/crt/
 /test/present/crt/
+/test/apisac/crt/

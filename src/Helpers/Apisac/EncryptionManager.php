@@ -11,12 +11,12 @@ class EncryptionManager
         $this->strategy = $strategy;
     }
 
-    public function encryptData(string $data, ?array $options)
+    public function encryptData(mixed $data, ?array $options)
     {
         return $this->strategy->encrypt($data, $options);
     }
 
-    public function decryptData(string $data, ?array $options)
+    public function decryptData(mixed $data, ?array $options)
     {
         return $this->strategy->decrypt($data, $options);
     }

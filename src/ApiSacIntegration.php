@@ -32,7 +32,8 @@ class ApiSacIntegration implements Refund
             return $this->response(
                 $service->refund($validation->response),
                 $service->outData,
-                $service->logs
+                $service->logs,
+                $service->statusCode
             );
         }
         return $this->response(false, $validation->response);

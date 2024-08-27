@@ -11,10 +11,10 @@ class RefundDto
     public ?float $adjustmentAmount;
     public function __construct()
     {
-        $this->transactionDate = date("Y-m-d");
+        $this->transactionDate = "";
         $this->acquirerId = "";
         $this->cardNumber = "";
-        $this->totalAmount = "";
+        $this->totalAmount = 0;
         $this->refundApprovalNumber = "";
         $this->adjustmentAmount = null;
     }

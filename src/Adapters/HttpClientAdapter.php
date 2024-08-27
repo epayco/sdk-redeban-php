@@ -32,22 +32,24 @@ class HttpClientAdapter
             $client = new Client();
 
             $certs = $this->generateCertFiles('apisac');
+            $options = [
+                'headers' => $headers,
+                'auth' => $this->getAuthCredentials(),
+                'cert' => $certs['cert'],
+                'ssl_key' => $certs['ssl_key'],
+                'verify' => $certs['verify'],
+                'body' => $body,
+            ];
             $response = $client->request(
                 $method,
                 $url,
-                [
-                    'headers' => $headers,
-                    'auth' => $this->getAuthCredentials(),
-                    'cert' => $certs['cert'],
-                    'ssl_key' => $certs['ssl_key'],
-                    'verify' => $certs['verify'],
-                    'body' => $body,
-                ]
+                $options
             );
 
             if ($response->getStatusCode() === 200) {
                 return (object)[
                     'success' => true,
+                    'code' => $response->getStatusCode(),
                     'data' => $response->getBody()->getContents(),
                 ];
             }
@@ -57,7 +59,8 @@ class HttpClientAdapter
         } catch (GuzzleException | RequestException $e) {
             return (object)[
                 'success' => false,
-                'data' => $e->getCode() . ' - ' . $e->getMessage()
+                'code' => $e->getCode(),
+                'data' => $e->getMessage()
             ];
         }
     }

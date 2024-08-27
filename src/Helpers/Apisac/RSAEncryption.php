@@ -2,11 +2,10 @@
 namespace Epayco\SdkRedeban\Helpers\Apisac;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256CBCHS512;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\Serializer;
 use Jose\Component\Encryption\Serializer\JWESerializerManager;
@@ -25,10 +24,10 @@ class RSAEncryption implements Encryption
         $this->sdkConfig = ApiSacConfig::getInstance();
     }
 
-    public function encrypt(string $data, ?array $options): ?string
+    public function encrypt(mixed $data, ?array $options): ?string
     {
         $apiSacConfig = $this->sdkConfig->getConfig();
-        $clientPrivateKey = $apiSacConfig->encryptCert;
+        $clientPrivateKey = $apiSacConfig->localEncryptCert;
         $serverPublicKey = $apiSacConfig->redebanEncryptCert;
 
         $publicKeyServer = JWKFactory::createFromKey(
@@ -38,40 +37,26 @@ class RSAEncryption implements Encryption
                 'kid' => 'My Public RSA key',
                 'use' => 'enc',
                 'alg' => $this->keyEncryptAlg,
-                'ID_Cliente' => $apiSacConfig->redebanClientId
+                'ID_Cliente' => $options['redebanClientId'] ?? 28
             ]
         );
 
-        $jwt = new Jwt();
-        $jws = $jwt->sign($clientPrivateKey, null, 'RS256');
-
-        $keyEncryptionAlgorithmManager = new AlgorithmManager([
-            new RSAOAEP256(),
-        ]);
-
-        $contentEncryptionAlgorithmManager = new AlgorithmManager([
-            new A256CBCHS512(),
-        ]);
-
-        $compressionMethodManager = new CompressionMethodManager([
-            new Deflate(),
-        ]);
+        $dataArray = json_decode(json_encode($data), true);
+        $jwt = JWT::encode($dataArray, $clientPrivateKey, 'RS256');
 
         $jweBuilder = new JWEBuilder(
-            $keyEncryptionAlgorithmManager,
-            $contentEncryptionAlgorithmManager,
-            $compressionMethodManager
+            new AlgorithmManager([new RSAOAEP256()]),
+            new AlgorithmManager([new A256CBCHS512()])
         );
 
         $jwe = $jweBuilder
-            ->create()          // Create a new JWE
-            ->withPayload($jws) // Set the payload
+            ->create()
+            ->withPayload($jwt) // Set the payload
             ->withSharedProtectedHeader([
                 'alg' => $this->keyEncryptAlg,
                 'enc' => $this->contentEncryptAlg,
-                'zip' => 'DEF',
             ])
-            ->addRecipient($publicKeyServer)  // Add a recipient (a shared key or public key).
+            ->addRecipient($publicKeyServer)
             ->build();
         $manager = new JWESerializerManager([
             new Serializer\JSONFlattenedSerializer()
@@ -80,68 +65,13 @@ class RSAEncryption implements Encryption
         return $manager->serialize('jwe_json_flattened', $jwe);
     }
 
-//    public function encrypt($data, array $options)
-//    {
-//        $clientPrivateKey = env('LOCAL_KEY');
-//        $serverPublicKey = env('REDEBAN_CERT');
-//
-//        $publicKeyServer = JWKFactory::createFromKey($serverPublicKey,
-//            null,
-//            [
-//                'kid' => 'My Public RSA key',
-//                'use' => 'enc',
-//                'alg' => 'RSA-OAEP-256',
-//                'ID_Cliente' => self::REDEBAN_PASARELA_ID_CLIENT
-//            ]
-//        );
-//
-//        $jwt = new JOSE_JWT($data);
-//        $jws = $jwt->sign($clientPrivateKey, 'RS256')->toString();
-//
-//        $keyEncryptionAlgorithmManager = new AlgorithmManager([
-//            new RSAOAEP256(),
-//        ]);
-//
-//        $contentEncryptionAlgorithmManager = new AlgorithmManager([
-//            new A256CBCHS512(),
-//        ]);
-//
-//        $compressionMethodManager = new CompressionMethodManager([
-//            new Deflate(),
-//        ]);
-//
-//        $jweBuilder = new JWEBuilder(
-//            $keyEncryptionAlgorithmManager,
-//            $contentEncryptionAlgorithmManager,
-//            $compressionMethodManager
-//        );
-//
-//        $jwe = $jweBuilder
-//            ->create()              // We want to create a new JWE
-//            ->withPayload($jws) // We set the payload
-//            ->withSharedProtectedHeader( [
-//                'alg' => 'RSA-OAEP-256',
-//                'enc' => 'A256CBC-HS512',
-//                'zip' => 'DEF',
-//            ])
-//            ->addRecipient($publicKeyServer)    // We add a recipient (a shared key or public key).
-//            ->build();
-//
-//        $manager = new JWESerializerManager([
-//            new Serializer\JSONFlattenedSerializer()
-//        ]);
-//
-//        return $manager->serialize('jwe_json_flattened', $jwe);
-//
-//    }
-
-
-    public function decrypt(string $data, ?array $options): ?stdClass
+    public function decrypt(mixed $data, ?array $options): ?stdClass
     {
         $apiSacConfig = $this->sdkConfig->getConfig();
         $redebanPublicKey = $apiSacConfig->redebanEncryptCert;
+        $key = new Key($redebanPublicKey, 'RS256');
         $headers = new stdClass();
-        return JWT::decode($data, $redebanPublicKey, $headers);
+        return JWT::decode($data, $key, $headers);
     }
 
 }
