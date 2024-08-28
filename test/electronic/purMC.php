@@ -22,15 +22,15 @@ $sdk->setUsername("TestAliEpayco")
 $purchaseRequest = new PurchaseDto();
 
 $purchaseRequest->terminalType = "WEB";
-$purchaseRequest->terminalId = "SRB00315";//ESB20107
-$purchaseRequest->acquirerId = "11174646";//11174653
-$purchaseRequest->terminalTransactionId = 333339;
+$purchaseRequest->terminalId = "MANDTE01";
+$purchaseRequest->acquirerId = "10003937";
+$purchaseRequest->terminalTransactionId = 333340;
 $purchaseRequest->panCaptureMode = "Manual";
 $purchaseRequest->pinCapability = "Virtual";
 $purchaseRequest->totalAmount = 59500;
 $purchaseRequest->ivaTax = 9500;
 $purchaseRequest->baseTax = 50000;
-$purchaseRequest->reference = 222229;
+$purchaseRequest->reference = 222230;
 $purchaseRequest->instalmentsQuantity = 1;
 $purchaseRequest->paymentIndicator = "UCOF"; // Solo para MasterCard
 $purchaseRequest->paymentType = "0";
@@ -38,9 +38,9 @@ $purchaseRequest->recurringAmountType = '';
 
 $purchaseRequest->cardType = 'idTarjetaCredito';
 $purchaseRequest->franchise = 'MasterCard';
-$purchaseRequest->cardNumber = "5471301455910662";
-$purchaseRequest->expirationDate = "2028-06-01";
-$purchaseRequest->securityCode = '334';
+$purchaseRequest->cardNumber = "5536439988368272";
+$purchaseRequest->expirationDate = "2024-06-01";
+$purchaseRequest->securityCode = '355';
 $purchaseRequest->personDocumentType = 'CC';
 $purchaseRequest->personDocumentNumber = '10613254';
 

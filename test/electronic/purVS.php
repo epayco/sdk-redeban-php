@@ -22,8 +22,8 @@ $sdk->setUsername("TestAliEpayco")
 $purchaseRequest = new PurchaseDto();
 
 $purchaseRequest->terminalType = "WEB";
-$purchaseRequest->terminalId = "SRB00315";
-$purchaseRequest->acquirerId = "11174646";
+$purchaseRequest->terminalId = "MANDTE01";
+$purchaseRequest->acquirerId = "10003937";
 $purchaseRequest->terminalTransactionId = 2;
 $purchaseRequest->panCaptureMode = "Manual";
 $purchaseRequest->pinCapability = "Virtual";

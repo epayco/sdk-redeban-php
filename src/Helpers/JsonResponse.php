@@ -7,17 +7,17 @@ use Epayco\SdkRedeban\DTOs\Electronic\ResponseEpurchaseDto;
 trait JsonResponse
 {
     protected ResponseEpurchaseDto $response;
-    public function response(bool $type, $data = null, $logs = null): ?string
+    public function response(bool $type, $data = null, $logs = null, $code = null): ?string
     {
         $this->response = new ResponseEpurchaseDto();
-        return $type ? self::successResponse("Success", $logs, $data)
-            : self::errorResponse('Error', $logs, $data);
+        return $type ? self::successResponse("Success", $logs, $data, $code)
+            : self::errorResponse('Error', $logs, $data, $code);
     }
 
-    protected function successResponse($message, $logs, $data = null): ?string
+    protected function successResponse($message, $logs, $data = null, $code = null): ?string
     {
         $this->response->success = true;
-        $this->response->code = 200;
+        $this->response->code = $code ?? 200;
         $this->response->message = $message;
         $this->response->data = $data;
         $this->response->request = $logs->request ?? '';
@@ -26,10 +26,10 @@ trait JsonResponse
         return json_encode($this->response);
     }
 
-    protected function errorResponse($message, $logs, $data = null): ?string
+    protected function errorResponse($message, $logs, $data = null, $code = null): ?string
     {
         $this->response->success = false;
-        $this->response->code = 500;
+        $this->response->code = $code ?? 500;
         $this->response->message = $message;
         $this->response->data = $data;
         $this->response->request = $logs->request ?? '';

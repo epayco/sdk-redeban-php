@@ -2,22 +2,25 @@
 
 namespace Epayco\SdkRedeban;
 
-use Epayco\SdkRedeban\DTOs\Electronic\RefundDto;
 use Epayco\SdkRedeban\DTOs\Electronic\DataConfigSdkDto;
 use Epayco\SdkRedeban\DTOs\Electronic\PurchaseDto;
+use Epayco\SdkRedeban\DTOs\Electronic\RefundDto;
 use Epayco\SdkRedeban\DTOs\Electronic\ShowTransactionDto;
 use Epayco\SdkRedeban\Helpers\JsonResponse;
 use Epayco\SdkRedeban\Helpers\PurchaseConfig;
-use Epayco\SdkRedeban\Interfaces\Electronic\Integration;
-use Epayco\SdkRedeban\Services\Electronic\RefundService;
+use Epayco\SdkRedeban\Interfaces\Purchase;
+use Epayco\SdkRedeban\Interfaces\Refund;
+use Epayco\SdkRedeban\Interfaces\Show;
+use Epayco\SdkRedeban\Interfaces\Undo;
 use Epayco\SdkRedeban\Services\Electronic\PurchaseService;
+use Epayco\SdkRedeban\Services\Electronic\RefundService;
 use Epayco\SdkRedeban\Services\Electronic\ReverseService;
 use Epayco\SdkRedeban\Services\Electronic\ShowService;
-use Epayco\SdkRedeban\Validations\Electronic\RefundValidation;
 use Epayco\SdkRedeban\Validations\Electronic\PurchaseValidation;
+use Epayco\SdkRedeban\Validations\Electronic\RefundValidation;
 use Epayco\SdkRedeban\Validations\Electronic\ShowValidation;
 
-class ElectronicPurchaseIntegration implements Integration
+class ElectronicPurchaseIntegration implements Purchase, Show, Refund, Undo
 {
     use JsonResponse;
     private DataConfigSdkDto $sdkConfig;
@@ -27,9 +30,9 @@ class ElectronicPurchaseIntegration implements Integration
         $this->sdkConfig = new DataConfigSdkDto();
     }
 
-    public function createTransaction(PurchaseDto $request,
-                                      $validation = new PurchaseValidation,
-                                      $service = new PurchaseService
+    public function createTransaction(?PurchaseDto $request,
+                                                       $validation = new PurchaseValidation,
+                                                       $service = new PurchaseService
     ): ?string {
         if ($validation($request)) {
             return $this->response(
@@ -42,7 +45,7 @@ class ElectronicPurchaseIntegration implements Integration
     }
 
     public function getTransaction(
-        ShowTransactionDto $request,
+        ?ShowTransactionDto $request,
         $validation = new ShowValidation,
         $service = new ShowService
     ): ?string
@@ -59,10 +62,13 @@ class ElectronicPurchaseIntegration implements Integration
     }
 
     public function refundTransaction(
-        RefundDto $request,
+        $request,
         $validation = new RefundValidation,
         $service = new RefundService
     ): ?string {
+        if (!$request instanceof RefundDto) {
+            return $this->response(false, "Datos de entrada incorrectos");
+        }
         $validationResponse = $validation($request);
         if ($validationResponse) {
             return $this->response(
@@ -74,7 +80,7 @@ class ElectronicPurchaseIntegration implements Integration
         return $this->response(false, $validation->response);
     }
 
-    public function undoTransaction(PurchaseDto $request,
+    public function undoTransaction(?PurchaseDto $request,
                                     $validation = new PurchaseValidation,
                                     $service = new ReverseService
     ): ?string {
