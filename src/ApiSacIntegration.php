@@ -25,18 +25,19 @@ class ApiSacIntegration implements Refund
                    $service = new RefundService
     ): ?string {
         if (!$request instanceof RefundDto) {
-            return $this->response(false, "Datos de entrada incorrectos");
+            return $this->response(false, "Datos de entrada incorrectos", null, null, 400);
         }
         $validationResponse = $validation($request);
         if ($validationResponse) {
             return $this->response(
                 $service->refund($validation->response),
+                null,
                 $service->outData,
                 $service->logs,
                 $service->statusCode
             );
         }
-        return $this->response(false, $validation->response);
+        return $this->response(false, $validation->response, null, null, 400);
     }
 
     public function setUsername($username): self
