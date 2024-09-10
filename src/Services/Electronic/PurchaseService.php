@@ -56,19 +56,17 @@ class PurchaseService extends Service
         $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->franquicia = $obj->franchise;
         $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->numTarjeta = $obj->cardNumber;
         $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->fechaExpiracion = $obj->expirationDate;
-        $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->codVerificacion = $obj->securityCode;
+        $compraProcesarSolicitud->infoMedioPago->{$obj->cardType}->codVerificacion = $obj->securityCode ?? '';
 
         $compraProcesarSolicitud->infoCompra = new stdClass();
         $compraProcesarSolicitud->infoCompra->montoTotal = $obj->totalAmount;
         $compraProcesarSolicitud->infoCompra->referencia = $obj->reference;
         $compraProcesarSolicitud->infoCompra->cantidadCuotas = $obj->instalmentsQuantity;
 
-        if ($obj->ivaTax > 0) {
-            $compraProcesarSolicitud->infoCompra->infoImpuestos = new stdClass();
-            $compraProcesarSolicitud->infoCompra->infoImpuestos->tipoImpuesto = 'IVA';
-            $compraProcesarSolicitud->infoCompra->infoImpuestos->monto = $obj->ivaTax;
-            $compraProcesarSolicitud->infoCompra->infoImpuestos->baseImpuesto = $obj->baseTax;
-        }
+        $compraProcesarSolicitud->infoCompra->infoImpuestos = new stdClass();
+        $compraProcesarSolicitud->infoCompra->infoImpuestos->tipoImpuesto = 'IVA';
+        $compraProcesarSolicitud->infoCompra->infoImpuestos->monto = $obj->ivaTax ?? 0;
+        $compraProcesarSolicitud->infoCompra->infoImpuestos->baseImpuesto = $obj->baseTax ?? 0;
 
         $compraProcesarSolicitud->infoAdicional = new stdClass();
         if ($obj->threeDSEci) {
@@ -119,7 +117,8 @@ class PurchaseService extends Service
             $compraProcesarSolicitud->infoCompra->infoFacilitador->SubMerchID = $obj->softDescSubMerchId;
         }
 
-        return $compraProcesarSolicitud;
+        $da = $compraProcesarSolicitud;
+        dd($da);
     }
 
     private function maskCardNumber(string $cardNumber): string
