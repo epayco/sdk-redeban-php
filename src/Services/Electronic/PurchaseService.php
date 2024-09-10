@@ -117,8 +117,7 @@ class PurchaseService extends Service
             $compraProcesarSolicitud->infoCompra->infoFacilitador->SubMerchID = $obj->softDescSubMerchId;
         }
 
-        $da = $compraProcesarSolicitud;
-        dd($da);
+        return $compraProcesarSolicitud;
     }
 
     private function maskCardNumber(string $cardNumber): string
