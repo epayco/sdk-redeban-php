@@ -20,8 +20,7 @@ trait JsonResponse
         $this->response->code = $code ?? 200;
         $this->response->message = $message ?? "OK";
         $this->response->data = $data;
-        $this->response->request = $logs->request ?? '';
-        $this->response->response = $logs->response ?? '';
+        $this->response->logs = $logs ?? '';
 
         return json_encode($this->response);
     }
@@ -32,8 +31,7 @@ trait JsonResponse
         $this->response->code = $code ?? 500;
         $this->response->message = $message ?? 'Error';
         $this->response->data = $data;
-        $this->response->request = $logs->request ?? '';
-        $this->response->response = $logs->response ?? '';
+        $this->response->logs = $logs ?? '';
 
         return json_encode($this->response);
     }

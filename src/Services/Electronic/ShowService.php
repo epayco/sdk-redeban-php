@@ -2,6 +2,7 @@
 
 namespace Epayco\SdkRedeban\Services\Electronic;
 
+use Epayco\SdkRedeban\Helpers\UtilsElectronicPurchase;
 use Epayco\SdkRedeban\Repositories\PurchaseElectronicRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
@@ -9,6 +10,7 @@ use stdClass;
 
 class ShowService extends Service
 {
+    use UtilsElectronicPurchase;
     public mixed $outData;
     public mixed $logs;
     public function show($data): bool
@@ -23,6 +25,8 @@ class ShowService extends Service
             $restFinalPos = (array)$providerResponse ?? [];
 
             $status = isset($providerResponse->infoRespuesta->codRespuesta) && $providerResponse->infoRespuesta->codRespuesta == '00';
+
+            $showResponse->logs->request = $this->cleanRequest(null, null, $request);
         } catch(Exception $e) {
             $providerResponse = $e->getMessage();
             $status = false;

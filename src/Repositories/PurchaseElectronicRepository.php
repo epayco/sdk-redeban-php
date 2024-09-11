@@ -161,8 +161,8 @@ class PurchaseElectronicRepository
     {
         $xml = new stdClass();
         $xmlRequest = $paycoClient->__getLastRequest() ?? '';
-        $xml->request = $maskedCard ? $this->cleanXmlRequest($maskedCard, $xmlRequest) : $xmlRequest;
-        $xml->response = $paycoClient->__getLastResponse() ?? '';
+        $xml->requestXml = $maskedCard ? $this->cleanXmlRequest($maskedCard, $xmlRequest) : $xmlRequest;
+        $xml->responseXml = $paycoClient->__getLastResponse() ?? '';
 
         return $xml;
     }
