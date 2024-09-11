@@ -2,6 +2,7 @@
 
 namespace Epayco\SdkRedeban\Services\Electronic;
 
+use Epayco\SdkRedeban\Helpers\UtilsElectronicPurchase;
 use Epayco\SdkRedeban\Repositories\PurchaseElectronicRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
@@ -9,6 +10,7 @@ use stdClass;
 
 class PurchaseService extends Service
 {
+    use UtilsElectronicPurchase;
     public mixed $outData;
     public mixed $logs;
     public function purchase($data): bool
@@ -24,6 +26,8 @@ class PurchaseService extends Service
             $restFinalPos = (array)$providerResponse ?? [];
 
             $status = isset($providerResponse->infoRespuesta->codRespuesta) && $providerResponse->infoRespuesta->codRespuesta == '00';
+
+            $purchaseResponse->logs->request = $this->cleanRequest($maskedCardNumber, $obj->cardType ?? '', $request);
         } catch(Exception $e) {
             $providerResponse = $e->getMessage();
             $status = false;

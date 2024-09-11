@@ -8,7 +8,6 @@ class ResponseEpurchaseDto
     public int $code;
     public string $message;
     public mixed $data;
-    public mixed $request;
-    public mixed $response;
+    public mixed $logs;
 
 }

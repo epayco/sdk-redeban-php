@@ -1,6 +1,7 @@
 <?php
 namespace Epayco\SdkRedeban\Services\Electronic;
 
+use Epayco\SdkRedeban\Helpers\UtilsElectronicPurchase;
 use Epayco\SdkRedeban\Repositories\PurchaseElectronicRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
@@ -8,6 +9,7 @@ use stdClass;
 
 class RefundService extends Service
 {
+    use UtilsElectronicPurchase;
     public mixed $outData;
     public mixed $logs;
     public function refund($inputData): bool
@@ -23,6 +25,8 @@ class RefundService extends Service
             $restFinalPos = (array)$providerResponse ?? [];
 
             $status = isset($providerResponse->infoRespuesta->codRespuesta) && $providerResponse->infoRespuesta->codRespuesta == '00';
+
+            $refundResponse->logs->request = $this->cleanRequest($maskedCardNumber, $obj->cardType ?? '', $refundRequest);
         } catch(Exception $e) {
             $providerResponse = $e->getMessage();
             $status = false;

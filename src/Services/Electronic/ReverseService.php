@@ -1,12 +1,14 @@
 <?php
 namespace Epayco\SdkRedeban\Services\Electronic;
 
+use Epayco\SdkRedeban\Helpers\UtilsElectronicPurchase;
 use Epayco\SdkRedeban\Repositories\PurchaseElectronicRepository;
 use Epayco\SdkRedeban\Services\Service;
 use Exception;
 
 class ReverseService extends Service
 {
+    use UtilsElectronicPurchase;
     protected const MAX_RETRY_REVERSE_REDEBAN = 3;
     public mixed $outData;
     public mixed $logs;
@@ -28,6 +30,8 @@ class ReverseService extends Service
                 $status = isset($providerResponse->infoRespuesta->codRespuesta) && $providerResponse->infoRespuesta->codRespuesta == '00';
                 $retry++;
             } while (!$status && $retry < self::MAX_RETRY_REVERSE_REDEBAN);
+
+            $reverseResponse->logs->request = $this->cleanRequest($maskedCardNumber, $obj->cardType ?? '', $reverseRequest);
 
         } catch(Exception $e) {
             $providerResponse = $e->getMessage();
