@@ -1,14 +1,15 @@
 <?php
 
 namespace Epayco\SdkRedeban\Helpers;
-use Epayco\SdkRedeban\DTOs\Apisac\DataConfigSdkDto;
+use Epayco\SdkRedeban\Helpers\PurchaseConfig;
 
 trait UtilsPresentSales
 {
     public function removeCardData($request): mixed
     {
-        $this->sdkConfig = new DataConfigSdkDto();
-        if ($this->sdkConfig->environment !== 'test') {
+        $sdkConfig = PurchaseConfig::getInstance();
+        $ePurchaseConfig = $sdkConfig->getConfig();
+        if ($ePurchaseConfig->environment !== 'test') {
             unset($request->infoMedioPago->infoEMV);
             unset($request->infoMedioPago->idTrack);
             unset($request->datosAdicionales);
