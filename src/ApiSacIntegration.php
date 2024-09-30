@@ -4,13 +4,17 @@ namespace Epayco\SdkRedeban;
 
 use Epayco\SdkRedeban\DTOs\Apisac\DataConfigSdkDto;
 use Epayco\SdkRedeban\DTOs\Apisac\RefundDto;
+use Epayco\SdkRedeban\DTOs\Apisac\ShowRefundDto;
 use Epayco\SdkRedeban\Helpers\Apisac\ApiSacConfig;
 use Epayco\SdkRedeban\Helpers\JsonResponse;
 use Epayco\SdkRedeban\Interfaces\Refund;
+use Epayco\SdkRedeban\Interfaces\ShowRefund;
 use Epayco\SdkRedeban\Services\Apisac\RefundService;
+use Epayco\SdkRedeban\Services\Apisac\ShowRefundService;
 use Epayco\SdkRedeban\Validations\Apisac\RefundValidation;
+use Epayco\SdkRedeban\Validations\Apisac\ShowRefundValidation;
 
-class ApiSacIntegration implements Refund
+class ApiSacIntegration implements Refund, ShowRefund
 {
     use JsonResponse;
     private DataConfigSdkDto $sdkConfig;
@@ -31,6 +35,24 @@ class ApiSacIntegration implements Refund
         if ($validationResponse) {
             return $this->response(
                 $service->refund($validation->response),
+                null,
+                $service->outData,
+                $service->logs,
+                $service->statusCode
+            );
+        }
+        return $this->response(false, $validation->response, null, null, 400);
+    }
+
+    public function showRefund(
+        ShowRefundDto $request,
+        $validation = new ShowRefundValidation,
+        $service = new ShowRefundService
+    ): ?string {
+        $validationResponse = $validation($request);
+        if ($validationResponse) {
+            return $this->response(
+                $service->showRefund($validation->response),
                 null,
                 $service->outData,
                 $service->logs,
