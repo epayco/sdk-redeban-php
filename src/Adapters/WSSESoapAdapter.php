@@ -41,7 +41,8 @@ class WSSESoapAdapter extends SoapClient
         $wsseSoap->addTimestamp(300);
 
         $privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'private'));
-        $privateKey->loadKey($this->localPrivateKey, false);
+        $privateKey->passphrase = '123456';
+        $privateKey->loadKey($this->localPrivateKey);
 
         $options = array("insertBefore" => false);
 
@@ -74,7 +75,8 @@ class WSSESoapAdapter extends SoapClient
                 "private" => [
                     "key" => $this->localPrivateKey,
                     "isFile" => false,
-                    "isCert" => false
+                    "isCert" => false,
+                    'passphrase' => '123456',
                 ]
             ]
         ];
