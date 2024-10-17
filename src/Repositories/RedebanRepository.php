@@ -81,6 +81,7 @@ class RedebanRepository
                     'local_cert' => $certs['local_cert'],
                     'local_pk' => $certs['local_pk'],
                     'cafile' => $certs['cafile'],
+                    'passphrase' => '123456',
                 ],
             ]),
         ];
